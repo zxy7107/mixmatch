@@ -101,6 +101,8 @@
                     //     }
                     //假数据END
                     console.log(res)
+                    res = [{"barcode":"1","skuName":"冬款小公主加厚保暖印花中筒袜","skuType":"4","skuStatus":"1","price":"17","channel":"淘宝戴维贝拉旗舰店","brand":"戴维贝拉davebella","size":"9cm","purchaseDate":"2017-10-25 20:58:19","photo":"..\/upload\/2013\/07\/20074100.jpg"},{"barcode":"2","skuName":"冬款加厚保暖条纹印花中筒袜","skuType":"4","skuStatus":"1","price":"17","channel":"淘宝戴维贝拉旗舰店","brand":"戴维贝拉davebella","size":"9cm","purchaseDate":"2017-10-25 20:58:19","photo":"..\/upload\/2013\/07\/20074100.jpg"},{"barcode":"3","skuName":"婴儿马甲粉小熊","skuType":"1","skuStatus":"1","price":"59","channel":"老豆商城七天无理由退换货","brand":"无","size":"86cm(12-18月)","purchaseDate":"2017-10-21 18:51:08","photo":"..\/upload\/2013\/07\/20074100.jpg"}]
+                    
                     self.skulist = res;
                  
                 });
