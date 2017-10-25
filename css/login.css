@@ -1,0 +1,57 @@
+#container #LoginPanel {
+	width:220px; 
+	margin: 50px 120px 50px 120px;
+	float:left; 
+	text-align: left;
+}
+
+#container #LoginPanel #Title {
+	width: 200px;
+	height: 80px; 
+	float:left;
+}
+#container #LoginPanel #Content{
+	width: 200px;
+	padding:0px; 
+	margin: 0px;
+	float:left;
+}
+#container #LoginPanel #Content form{
+	padding:0px; 
+	margin:0px;
+}
+#container #LoginPanel #Content p{
+	margin:0px; 
+	text-align:right;
+	padding:5px 8px 0px 2px;
+	font-size:18px;
+}
+#container #LoginPanel #Content p input{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	text-align:center;
+}
+#container #LoginPanel #Content form input.text{
+	border-bottom:1px solid #000000;
+	border-left:none; 
+	border-right:none;
+	border-top:none;
+	padding:0px; 
+	width:140px; 
+}
+#container #LoginPanel #Content form input.btn{
+	border:1px solid #000000;
+	background-color:#ffeff0;
+	padding:0px;
+	color:red;
+}
+#container #LoginPanel #Content p a:link, #login p a:visited{
+	color:#333333;
+	text-decoration:none;
+}
+#container #LoginPanel #Content p a:hover{
+	color:#000088;
+	text-decoration:underline;
+}
+
+ 

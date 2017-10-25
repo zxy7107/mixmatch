@@ -1,0 +1,77 @@
+ 
+body{
+	background-color:lightyellow;
+	margin:1px 0px 0px 0px;
+	padding:0px;
+	text-align:center;
+	font-size:15px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+#container{
+	position:relative;
+	margin:0px 5px 0px 5px;
+	width:100%;
+	text-align:left;
+	background-color:lightgreen;
+}
+
+#container #title {
+	width: 100%; 
+	margin: 5px 5px 5px 5px; 
+	background-color: #848284; 
+	font-size: 18px;
+}
+ 
+#container #title img {
+	border:0px;
+	hspace:2;
+	align:left;
+	width:20px;
+	height:20px;
+	margin: 6px 1px 0px 2px;
+}
+
+#container #content {
+	width: 100%; 
+	margin: 0px 5px 0px 5px; 
+	background-color: lightyellow;
+}
+
+#container #content form { 
+	margin: 0px; 
+}
+
+
+#container #content form p { 
+	margin: 15px 5px 15px 15px;  
+	
+}
+
+#container #content form p select { 
+	margin: 5px 5px 5px 5px; 
+	background-color: lightyellow;
+	
+}
+
+#container #content form p input{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+}
+#container #content form p input.text{
+	border-bottom:1px solid #000000;
+	border-left:none; 
+	border-right:none;
+	border-top:none;
+	padding:0px; 
+	width:140px;
+	text-align:center;
+}
+#container #content form p input.btn{
+	border:1px solid #000000;
+	background-color:#ffeff0;
+	padding:0px;
+}
+
+.a1{background-color : #775656; color : #fff;}
+.submit{background-color:#775656;color: #fff;}

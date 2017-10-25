@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Theming - Semantic</title>
+    <link rel="stylesheet" type="text/css" href="./Semantic-UI-master/dist/semantic.css">
+    <script src="./Semantic-UI-master/examples/assets/library/jquery.min.js"></script>
+    <script src="./Semantic-UI-master/dist/semantic.js"></script>
+    <!--- Example CSS -->
+    <style>
+body {
+        padding: 1em;
+    }
+    input {
+        border: none;
+    }
+    .ui.grid {
+        margin: 0;
+    }
+
+    .ui.grid>.column:not(.row),
+    .ui.grid>.row>.column {
+        padding: 0;
+    }
+
+    .ui.grid>.row {
+        padding: 0;
+    }
+    /*.ui.three.column.grid img {*/
+
+    .ui.one.cards img {
+        max-width: 100%;
+    }
+
+    .ui.corner.label {
+        z-index: 9;
+    }
+
+    .ui.striped.right.aligned.table {
+        border: none;
+    }
+    /*    .extra.content {
+      height: 3rem;
+      line-height: 3rem;
+    }*/
+
+    .toggleview i {
+        font-size: 2.2rem;
+    }
+
+    .compare .ui.move.reveal .visible.content {
+        width: 50%;
+    }
+
+    .compare .ui.move.reveal.image .hidden.content {
+        width: 50%!important;
+        transform: translateX(100%);
+    }
+
+    .canuse {
+        color: #00B5AD;
+    }
+
+    .cantuse {
+        color: #DB2828;
+    }
+
+    .canbuy {
+        color: #E03997;
+    }
+
+    .lookfor {
+        color: #767676;
+    }
+
+    .ui.segment.dimmable {
+        padding: 0;
+    }
+
+    .ui.inverted.button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 100%;
+        height: 100%;
+    }
+
+    .ui.inverted.button .icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 3rem;
+        transform: translateX(-50%) translateY(-50%);
+    }
+}
+)
+    </style>
+    <!--- Example Javascript -->
+    <script>
+    $(document)
+        .ready(function() {
+            $('.special.card .image').dimmer({
+                on: 'hover'
+            });
+            $('.star.rating')
+                .rating();
+            $('.card .dimmer')
+                .dimmer({
+                    on: 'hover'
+                });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- <div class="ui sticky" >
+          <div class="ui fluid three item tabular menu">
+            <a class="active item">选项卡 1</a>
+            <a class="item">选项卡 2</a>
+            <a class="item">选项卡 3</a>
+          </div>
+        </div>
+ -->
+ <div id="app">
+    <div class="ui one cards">
+        <div class="ui card">
+            <div class="content transition sku">
+                <table class="ui striped right aligned table">
+                    <thead>
+                        <tr>
+                            <th class="left aligned"></th>
+                            <th>状态</th>
+                            <th>名称</th>
+                            <th>尺码</th>
+                            <th>价格</th>
+                            <th>渠道</th>
+                            <th>品牌</th>
+                            <th>购买日期</th>
+                            <th>类别</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="sku in skulist">
+                            <td class="left aligned"><img :src="sku.photo"></td>
+                            <td v-if="sku.skuStatus == 1"><span class="canuse"><i class="checkmark icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 2"><span class="cantuse"><i class="minus circle icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 3"><span class="canbuy"><i class="shop icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 4"><span class="lookfor"><i class="search icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 5"><span class="dropped"><i class="search icon"></i></span></td>
+                            <td v-else><span><i class="help icon"></i></span></td>
+                            <td><input type="text" v-model="sku.skuName" ></td>
+                            <td><input type="text" v-model="sku.size" ></td>
+                            <td><input type="text" v-model="sku.price" ></td>
+                            <td><input type="text" v-model="sku.channel" ></td>
+                            <td><input type="text" v-model="sku.brand" ></td>
+                            <td><input type="text" v-model="sku.purchaseDate" ></td>
+                            <td><input type="text" v-model="sku.skuType" ></td>
+                        </tr>
+<!--                         <tr v-for="sku in skulist">
+                            <td class="left aligned"><img :src="sku.photo"></td>
+                            <td v-if="sku.skuStatus == 1"><span class="canuse"><i class="checkmark icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 2"><span class="cantuse"><i class="minus circle icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 3"><span class="canbuy"><i class="shop icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 4"><span class="lookfor"><i class="search icon"></i></span></td>
+                            <td v-else-if="sku.skuStatus == 5"><span class="dropped"><i class="search icon"></i></span></td>
+                            <td v-else><span><i class="help icon"></i></span></td>
+                            <td>{{sku.skuName}}</td>
+                            <td>{{sku.size}}</td>
+                            <td>{{sku.price}}</td>
+                            <td>{{sku.channel}}</td>
+                            <td>{{sku.brand}}</td>
+                            <td>{{sku.purchaseDate}}</td>
+                            <td>{{sku.skuType}}</td>
+                        </tr>
+ -->                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="./js/lib/underscore.min.js"></script>
+    <script src="./js/lib/vue.js"></script>
+    <script src="./js/controller/list.js"></script>
+</body>
+
+</html>

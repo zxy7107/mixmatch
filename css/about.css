@@ -1,0 +1,39 @@
+Html {
+	BackGround: #D6D3CE; Height: 100%
+}
+Body {
+	Border-Top-Width: 0px; 
+	Padding-Right: 0px; 
+	Padding-Left: 0px; 
+	Border-Left-Width: 0px;
+	Border-Bottom-Width: 0px; 
+	Padding-Bottom: 0px; 
+	Margin: 0px;  
+	Overflow: hidden; 
+	Color: buttontext;
+	Padding-TOP: 0px; 
+	Height: 100%; 
+	Border-Right-Width: 0px;
+	Line-Height: 18px;
+	Font-Family: "Arial", "ËÎÌו"
+}
+Table{  
+	Word-Break:break-all;
+	Border-Collapse: collapse;
+}
+Td {  
+	Font-Size: 12px;
+}
+A {  
+	Color: #0066CC; 
+	Text-Decoration: none;
+}
+
+A:visited{TEXT-DECORATION:none;color : 000000}
+A:link{text-decoration:none;color : 000000}
+A:hover{TEXT-DECORATION:none;color : 04266D}
+ 
+ 
+@Media Print {
+ 	.Ptn{ Display:none; }
+}
