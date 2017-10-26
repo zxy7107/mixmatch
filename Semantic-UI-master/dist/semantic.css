@@ -23830,7 +23830,7 @@ Floated Menu / Item
 /* Responsive */
 
 /*@media only screen and (max-width: 767px) {*/
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 380px) {
   .ui.table:not(.unstackable) {
     width: 100%;
   }

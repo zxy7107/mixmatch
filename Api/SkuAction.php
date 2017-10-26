@@ -13,31 +13,32 @@ if(!empty($_REQUEST['action'])) {
 	$action = $_REQUEST['action'];
 	if($action == "add") {
 		//说明用户希望执行添加图书信息
-		$book = new Book(); 
-		$array_book = $_POST["book"];
-		
-		
+		$sku = new Sku(); 
+		// $array_sku = $_POST["sku"];
+
 		/*处理图片上传*/
 		require_once("../util/upload.class.php");
 		require_once("../util/util.php");
 		
 		
-		$book->setBarcode($array_book['barcode']);
-		$book->setBookName($array_book['bookName']);
-		$book->setBookType($array_book['bookType']);
-		$book->setCount($array_book['count']); 
-		$book->setPrice($array_book['price']);
-		$book->setPublish($array_book['publish']); 
-		$book->setPublishDate($array_book['publishDate']);
-		
-		
+		// $sku->setBarcode($array_sku['barcode']);
+		$sku->setSkuName($_POST['skuName']);
+		$sku->setSkuType($_POST['skuType']);
+		$sku->setSkuStatus($_POST['skuStatus']);
+		$sku->setChannel($_POST['channel']);
+		$sku->setBrand($_POST['brand']);
+		$sku->setSize($_POST['size']);
+		$sku->setPrice($_POST['price']);
+		$sku->setPurchaseDate($_POST['purchaseDate']);
+
 		$photo = "../upload/NoImage.jpg"; 
 		if ($_FILES['photo']['name'] != ''){
 			/*--  实例化上传类  --*/
 			$file = $_FILES['photo'];
 			$upload_path = '../upload';
 			$allow_type = array('jpg','bmp','png','gif','jpeg');
-			$max_size=2048000;
+			// $max_size=2048000;
+			$max_size=3072000;
 			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
 
 			$upload->upload();
@@ -46,16 +47,20 @@ if(!empty($_REQUEST['action'])) {
 			// $photo = substr($pic['path'], 2)."/".$pic['savename']; 
 			$photo = $pic['path']."/".$pic['savename']; 
 		}
-		$book->setPhoto($photo);
+		$sku->setPhoto($photo);
 		
 		//完成添加->数据库
-		$res = $skuService->AddBook($book);
+		$res = $skuService->AddSku($sku);
 		if($res==1) {
-			header("Location: ../ok.php");
+			header('Content-type: text/json;charset=utf-8');
+			echo "success";
+			// header("Location: ../ok.php");
 			exit();
 		} else {
 			//失败
 			header("Location: ../error.php");
+			
+
 			exit();
 		}
 	} else if($action == "query") {
@@ -124,7 +129,8 @@ if(!empty($_REQUEST['action'])) {
 			$file = $_FILES['photo'];
 			$upload_path = '../upload';
 			$allow_type = array('jpg','bmp','png','gif','jpeg');
-			$max_size=2048000;
+			// $max_size=2048000;
+			$max_size=3072000;
 		
 			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
 			$upload->upload();

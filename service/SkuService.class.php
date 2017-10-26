@@ -7,19 +7,23 @@ require_once '../phpbean/Sku.class.php';
 class SkuService {
 	
 	/*添加图书信息*/
-	function AddBook(Sku $book) {
+	function AddSku(Sku $sku) {
 		
-		$book_barcode = $book->getBarcode();
-		$book_bookName = $book->getBookName();
-		$book_bookType = $book->getBookType();
-		$book_price = $book->getPrice();
-		$book_count = $book->getCount();
-		$book_publish = $book->getPublish(); 
-		$book_publishDate = $book->getPublishDate();
-		$book_photo = $book->getPhoto(); 
-		
+		// $sku_barcode = $sku->getBarcode();
+		$sku_skuName = $sku->getSkuName();
+		$sku_skuType = $sku->getSkuType();
+
+		$sku_skuStatus = $sku->getSkuStatus();
+		$sku_price = $sku->getPrice();
+		$sku_channel = $sku->getChannel();
+		$sku_brand = $sku->getBrand();
+		$sku_size = $sku->getSize();
+		$sku_purchaseDate = $sku->getPurchaseDate();
+		$sku_photo = $sku->getPhoto(); 
 		// 构建sql语句 
-		$sql = "insert into t_Book(barcode,bookName,bookType,price,count,publish,publishDate,photo) values ('$book_barcode','$book_bookName',$book_bookType,$book_price,$book_count,'$book_publish','$book_publishDate','$book_photo')";
+		// $sql = "insert into t_Sku(barcode,bookName,bookType,price,count,publish,publishDate,photo) values ('$book_barcode','$book_bookName',$book_bookType,$book_price,$book_count,'$book_publish','$book_publishDate','$book_photo')";
+		$sql = "insert into t_Sku(skuName,skuType,skuStatus, price,channel,brand, size,purchaseDate,photo) 
+		values ('$sku_skuName','$sku_skuType','$sku_skuStatus', $sku_price,'$sku_channel','$sku_brand','$sku_size','$sku_purchaseDate','$sku_photo')";
 		  
 		$sqlHelper = new SqlHelper ();
 		$res = $sqlHelper->execute_dml ( $sql );
@@ -43,6 +47,7 @@ class SkuService {
 		
 		$sql = "update t_Sku set skuName='$sku_skuName'";
 		$sql = $sql.",skuType=$sku_skuType";
+		$sql = $sql.",skuType='$sku_skuStatus'";
 		$sql = $sql.",price=$sku_price";
 		$sql = $sql.",channel='$sku_channel'";
 		$sql = $sql.",brand='$sku_brand'";
