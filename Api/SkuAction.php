@@ -38,7 +38,7 @@ if(!empty($_REQUEST['action'])) {
 			$upload_path = '../upload';
 			$allow_type = array('jpg','bmp','png','gif','jpeg');
 			// $max_size=2048000;
-			$max_size=3072000;
+			$max_size=5120000;
 			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
 
 			$upload->upload();
@@ -53,7 +53,11 @@ if(!empty($_REQUEST['action'])) {
 		$res = $skuService->AddSku($sku);
 		if($res==1) {
 			header('Content-type: text/json;charset=utf-8');
-			echo "success";
+			$object = (object) [
+		    'result' => 'foo',
+		    'success' => true,
+		  ];
+
 			// header("Location: ../ok.php");
 			exit();
 		} else {
@@ -108,42 +112,55 @@ if(!empty($_REQUEST['action'])) {
 		
 	} else if($action == "update") {
 		//说明用户希望执行更新图书信息   
-		$array_sku = $_POST['sku']; 
-		$sku = $skuService->GetSku($array_sku['barcode']);
+		// $array_sku = $_POST['sku']; 
+		$sku = $skuService->GetSku($_POST['barcode']);
 		
-		$sku->setBarcode($array_sku['barcode']);
-		$sku->setSkuName($array_sku['skuName']);
-		$sku->setSkuType($array_sku['skuType']);
-		$sku->setSkuStatus($array_sku['skuStatus']);
-		$sku->setChannel($array_sku['channel']);
-		$sku->setBrand($array_sku['brand']);
-		$sku->setSize($array_sku['size']);
-		$sku->setPrice($array_sku['price']);
-		$sku->setPurchaseDate($array_sku['purchaseDate']);
+		$sku->setBarcode($_POST['barcode']);
+		$sku->setSkuName($_POST['skuName']);
+		$sku->setSkuType($_POST['skuType']);
+		$sku->setSkuStatus($_POST['skuStatus']);
+		$sku->setChannel($_POST['channel']);
+		$sku->setBrand($_POST['brand']);
+		$sku->setSize($_POST['size']);
+		$sku->setPrice($_POST['price']);
+		$sku->setPurchaseDate($_POST['purchaseDate']);
 		
 		/*处理图片上传*/
 		require_once("../util/upload.class.php");
 		require_once("../util/util.php"); 
-		if ($_FILES['photo']['name'] != ''){
+		if(isset($_POST['photo'])) {
+			$sku->setPhoto($_POST['photo']);
+
+		} else if($_FILES['photo']['name'] != ''){
 			/*--  实例化上传类  --*/
 			$file = $_FILES['photo'];
 			$upload_path = '../upload';
+
 			$allow_type = array('jpg','bmp','png','gif','jpeg');
 			// $max_size=2048000;
-			$max_size=3072000;
-		
+			$max_size=5120000;
+		var_dump($file);
 			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
+			var_dump($upload);
 			$upload->upload();
 			$pic = $upload->getSaveFileInfo(); 
-			$photo = substr($pic['path'], 2)."/".$pic['savename'];
+			var_dump($pic);
+
+			$photo = $pic['path']."/".$pic['savename']; 
+			// $photo = substr($pic['path'], 2)."/".$pic['savename'];
 			$sku->setPhoto($photo);
 		}
 	 
 		//完成修改->数据库
 		$res = $skuService->UpdateSku($sku);
-		 
+		print_r($sku);
 		if($res != 0 ) {
-			header("Location: ../ok.php");
+			// header("Location: ../ok.php");
+			header('Content-type: text/json;charset=utf-8');
+			$object = (object) [
+		    'result' => 'OK',
+		    'success' => true,
+		  ];
 			exit();
 		} else {
 			//失败

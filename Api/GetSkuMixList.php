@@ -1,13 +1,12 @@
 <?php 
-require_once '../service/SkuService.class.php';
-require_once '../service/BookClassService.class.php';
-require_once '../phpbean/Sku.class.php';
+require_once '../phpbean/SkuMix.class.php';  //导入实体类
+require_once '../service/SkuMixService.class.php';  //导入业务层类
+
 
 // $barcode = $_GET['barcode'];
-$skuService = new SkuService(); 
-// $book = $skuService->GetBook($barcode);
-$allSku = $skuService->QueryAllSku();
-$bookClassService = new BookClassService(); 
+$skuMixService = new SkuMixService(); 
+// $book = $skuMixService->GetBook($barcode);
+$skumixlist = $skuMixService->QueryAllSkuMixList();
 
 /*使用 JSON数据格式返回*/
 header('Content-type: text/json;charset=utf-8');
@@ -20,6 +19,6 @@ header('Content-type: text/json;charset=utf-8');
 // echo "\",publishDate:\"".date("Y-m-d",strtotime($book->getPublishDate()));
 // echo "\",photo:\"".$book->getPhoto();  
 // echo "\"}"; 
-echo json_encode($allSku, JSON_UNESCAPED_UNICODE);
+echo json_encode($skumixlist, JSON_UNESCAPED_UNICODE);
  
 ?>

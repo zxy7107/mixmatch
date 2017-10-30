@@ -47,7 +47,7 @@ class SkuService {
 		
 		$sql = "update t_Sku set skuName='$sku_skuName'";
 		$sql = $sql.",skuType=$sku_skuType";
-		$sql = $sql.",skuType='$sku_skuStatus'";
+		$sql = $sql.",skuStatus='$sku_skuStatus'";
 		$sql = $sql.",price=$sku_price";
 		$sql = $sql.",channel='$sku_channel'";
 		$sql = $sql.",brand='$sku_brand'";
@@ -56,7 +56,7 @@ class SkuService {
 		$sql = $sql.",purchaseDate='$sku_purchaseDate'";
 		$sql = $sql." where barcode='$sku_barcode'";
 		
-		
+		var_dump($sql); 
 		$sqlHelper = new SqlHelper ();
 		 
 		$res = $sqlHelper->execute_dml ( $sql );
@@ -117,9 +117,18 @@ class SkuService {
 	}
 	
 	
-	/*查询所有的图书信息 */
-	function QueryAllBook() {
-		$sql = "select barcode,bookName from t_Book";
+	/*查询所有的单品信息 */
+	function QueryAllSku() {
+		$sql = "select barcode,photo,skuStatus from t_sku";
+		$sqlHelper = new SqlHelper ();
+		$res = $sqlHelper->execute_dql2 ( $sql );
+		// 关闭连接
+		$sqlHelper->close_connect ();
+		return $res;
+	}
+	function QuerySkuByBarcode($barcodeString) {
+		// print_r (explode("/",$barcodeString));
+		$sql = "select barcode,skuStatus from t_sku where barcode in (".$barcodeString.") ";
 		$sqlHelper = new SqlHelper ();
 		$res = $sqlHelper->execute_dql2 ( $sql );
 		// 关闭连接

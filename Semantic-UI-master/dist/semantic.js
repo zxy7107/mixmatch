@@ -5391,6 +5391,8 @@ $.fn.dropdown = function(parameters) {
                 $activeLabels = $labels.filter('.' + className.active),
                 $nextActive   = $label.nextAll('.' + className.active),
                 $prevActive   = $label.prevAll('.' + className.active),
+                // debugger
+                
                 $range = ($nextActive.length > 0)
                   ? $label.nextUntil($nextActive).add($activeLabels).add($label)
                   : $label.prevUntil($prevActive).add($activeLabels).add($label)
@@ -6930,6 +6932,7 @@ $.fn.dropdown = function(parameters) {
 
         add: {
           label: function(value, text, shouldAnimate) {
+            // debugger
             var
               $next  = module.is.searchSelection()
                 ? $search
