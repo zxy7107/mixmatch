@@ -225,6 +225,8 @@ new Vue({
                 //假数据START
                 
                 //假数据END
+                alert(res.success)
+
                 if(res.success) {
                    self.newsku = {};
                 } else {

@@ -51,12 +51,13 @@ if(!empty($_REQUEST['action'])) {
 		
 		//完成添加->数据库
 		$res = $skuService->AddSku($sku);
-		if($res==1) {
+		if($res==1 && $photo !== '/') {
 			header('Content-type: text/json;charset=utf-8');
 			$object = (object) [
-		    'result' => 'foo',
+		    'result' => 'OK',
 		    'success' => true,
 		  ];
+			echo json_encode($object, JSON_UNESCAPED_UNICODE);
 
 			// header("Location: ../ok.php");
 			exit();
@@ -139,12 +140,9 @@ if(!empty($_REQUEST['action'])) {
 			$allow_type = array('jpg','bmp','png','gif','jpeg');
 			// $max_size=2048000;
 			$max_size=5120000;
-		var_dump($file);
 			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
-			var_dump($upload);
 			$upload->upload();
 			$pic = $upload->getSaveFileInfo(); 
-			var_dump($pic);
 
 			$photo = $pic['path']."/".$pic['savename']; 
 			// $photo = substr($pic['path'], 2)."/".$pic['savename'];
@@ -153,14 +151,15 @@ if(!empty($_REQUEST['action'])) {
 	 
 		//完成修改->数据库
 		$res = $skuService->UpdateSku($sku);
-		print_r($sku);
-		if($res != 0 ) {
+		if($res != 0  && $photo !== '/') {
 			// header("Location: ../ok.php");
 			header('Content-type: text/json;charset=utf-8');
 			$object = (object) [
 		    'result' => 'OK',
 		    'success' => true,
 		  ];
+			echo json_encode($object, JSON_UNESCAPED_UNICODE);
+
 			exit();
 		} else {
 			//失败

@@ -128,7 +128,7 @@ class SkuMixService {
 	// }
 
 	function QueryAllSkuMixList() {
-		$sql = "select * from t_skuMix";
+		$sql = "select * from t_skuMix order by id desc";
 		$sqlHelper = new SqlHelper ();
 		$res = $sqlHelper->execute_dql2 ( $sql );
 		// 关闭连接

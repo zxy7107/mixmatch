@@ -122,6 +122,7 @@ class upFiles
 	                //最终组合的文件路径
 	                $this->finalFile = $dir2.'/'.$savename;
 	                //把上传的文件从临时目录移到目标目录
+	                echo $tmpname;
 	                if(!move_uploaded_file($tmpname,$this->finalFile))
 	                {
 	                    $this->$this->uploadFiles['error'][$i];

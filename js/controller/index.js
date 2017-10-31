@@ -47,6 +47,7 @@ new Vue({
     el: '#app',
     data: {
         skulist: [],
+        skulistavailable:[],
         newsku: {},
         newskumix: {},
         skumixlist: []
@@ -76,21 +77,10 @@ new Vue({
     components: {
         'skuselection': SkuSelection
     },
-    // created: function(){
-    //     var self = this;
-    //     if(!self.token) {
-    //         window.location.href = "./login.html" //取不到token跳转登录页
-    //     }
-    // },
-    // created: function(){
-    //     var self = this;
-
-    // },
     mounted: function() {
         var self = this;
         self.getAllSku();
         self.getSkuList();
-        self.getSkuMixList();
    
     // $('.ui.card').on('click', '.ui.move.reveal.image', function(){
     $('.ui.card').on('click', '.canclick', function() {
@@ -122,72 +112,17 @@ new Vue({
                 data: {}
             }).always(function(res) {
                 //假数据START
-                // res ={
-                //     "result":[
-                //         {
-                //             "name":"1D风险价值",
-                //             "per95":"0.64",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"1D预期收益不足",
-                //             "per95":"0.64",
-                //             "per99":"0.52"
-                //         },
-                //         {
-                //             "name":"10D风险价值",
-                //             "per95":"0.44",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"10D预期收益不足",
-                //             "per95":"0.78",
-                //             "per99":"0.63"
-                //         }],
-                //         "code":"",
-                //         "resultMassage":"",
-                //         "success":true
-                //     }
+                
                 //假数据END
                 console.log(res)
-                // res = [
-                // {
-                //     "barcode": "1",
-                //     "skuName": "冬款小公主加厚保暖印花中筒袜",
-                //     "skuType": "4",
-                //     "skuStatus": "1",
-                //     "price": "17",
-                //     "channel": "淘宝戴维贝拉旗舰店",
-                //     "brand": "戴维贝拉davebella",
-                //     "size": "9cm",
-                //     "purchaseDate": "2017-10-25 20:58:19",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // },
-                // {
-                //     "barcode": "2",
-                //     "skuName": "冬款加厚保暖条纹印花中筒袜",
-                //     "skuType": "4",
-                //     "skuStatus": "2",
-                //     "price": "17",
-                //     "channel": "淘宝戴维贝拉旗舰店",
-                //     "brand": "戴维贝拉davebella",
-                //     "size": "9cm",
-                //     "purchaseDate": "2017-10-25 20:58:19",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // },
-                // {
-                //     "barcode": "3",
-                //     "skuName": "婴儿马甲粉小熊",
-                //     "skuType": "1",
-                //     "skuStatus": "5",
-                //     "price": "59",
-                //     "channel": "老豆商城七天无理由退换货",
-                //     "brand": "无",
-                //     "size": "86cm(12-18月)",
-                //     "purchaseDate": "2017-10-21 18:51:08",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // }]
-                self.skulist = res;
+                
+                self.skulist = _.extend([], res);
+                var filtered = _.filter(res, function(sku){
+                        return sku.skuStatus == 1;
+                    })
+                console.log(filtered)
+                self.skulistavailable = filtered;
+                self.getSkuMixList();
 
             });
         },
@@ -201,52 +136,22 @@ new Vue({
                 data: {}
             }).always(function(res) {
                 //假数据START
-                // res ={
-                //     "result":[
-                //         {
-                //             "name":"1D风险价值",
-                //             "per95":"0.64",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"1D预期收益不足",
-                //             "per95":"0.64",
-                //             "per99":"0.52"
-                //         },
-                //         {
-                //             "name":"10D风险价值",
-                //             "per95":"0.44",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"10D预期收益不足",
-                //             "per95":"0.78",
-                //             "per99":"0.63"
-                //         }],
-                //         "code":"",
-                //         "resultMassage":"",
-                //         "success":true
-                //     }
+               
                 //假数据END
                 console.log(res)
                 
-               
-                _.each(res, function(skumix, k){
-                    skumix['skuMixArray'] = _.filter(self.skulist, function(sku){
-                        return skumix.skuMix.indexOf(sku.barcode) > -1
-                    })
-
-                })
-                console.log(res)
                 self.skumixlist = res;
-
+                _.each(self.skumixlist, function(skumix, k){
+                    self.skumixlist[k]['skuMixArray'] =  _.filter(self.skulist, function(sku){
+                        return _.indexOf(skumix.skuMix.split(','), sku.barcode) > -1
+                    })
+                })
+                console.log(self.skumixlist)
             });
         },
         saveSkuMix: function(e) {
             var self = this;
             var formData = new FormData();
-            console.log('===')
-            console.log(self.newskumix)
             formData.append("skuMixName", self.newskumix.skuName);
             formData.append("skuMixType", self.newskumix.skuType);
             formData.append("price", self.newskumix.price);
@@ -306,16 +211,11 @@ new Vue({
             formData.append("price", target.price);
             formData.append("purchaseDate", target.purchaseDate);
             // HTML 文件类型input，由用户选择
-            console.log('++++')
-            console.log(photoinput[0].files)
             if(photoinput[0].files[0]) {
                 formData.append("photo", photoinput[0].files[0]);
             } else {
                 formData.append("photo", target.photo);
             }
-            console.log(target.photo)
-
-     
 
             $.ajax({
                 method: "POST",
@@ -367,7 +267,7 @@ new Vue({
                 //         "success":true
                 //     }
                 //假数据END
-                console.log(res)
+                // console.log(res)
                 self.getSkuList();
 
             });
@@ -382,72 +282,10 @@ new Vue({
                 data: {}
             }).always(function(res) {
                 //假数据START
-                // res ={
-                //     "result":[
-                //         {
-                //             "name":"1D风险价值",
-                //             "per95":"0.64",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"1D预期收益不足",
-                //             "per95":"0.64",
-                //             "per99":"0.52"
-                //         },
-                //         {
-                //             "name":"10D风险价值",
-                //             "per95":"0.44",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"10D预期收益不足",
-                //             "per95":"0.78",
-                //             "per99":"0.63"
-                //         }],
-                //         "code":"",
-                //         "resultMassage":"",
-                //         "success":true
-                //     }
+                
                 //假数据END
-                console.log(res)
-                // res = [
-                // {
-                //     "barcode": "1",
-                //     "skuName": "冬款小公主加厚保暖印花中筒袜",
-                //     "skuType": "4",
-                //     "skuStatus": "1",
-                //     "price": "17",
-                //     "channel": "淘宝戴维贝拉旗舰店",
-                //     "brand": "戴维贝拉davebella",
-                //     "size": "9cm",
-                //     "purchaseDate": "2017-10-25 20:58:19",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // },
-                // {
-                //     "barcode": "2",
-                //     "skuName": "冬款加厚保暖条纹印花中筒袜",
-                //     "skuType": "4",
-                //     "skuStatus": "2",
-                //     "price": "17",
-                //     "channel": "淘宝戴维贝拉旗舰店",
-                //     "brand": "戴维贝拉davebella",
-                //     "size": "9cm",
-                //     "purchaseDate": "2017-10-25 20:58:19",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // },
-                // {
-                //     "barcode": "3",
-                //     "skuName": "婴儿马甲粉小熊",
-                //     "skuType": "1",
-                //     "skuStatus": "5",
-                //     "price": "59",
-                //     "channel": "老豆商城七天无理由退换货",
-                //     "brand": "无",
-                //     "size": "86cm(12-18月)",
-                //     "purchaseDate": "2017-10-21 18:51:08",
-                //     "photo": ".\/upload\/2013\/07\/20074100.jpg"
-                // }]
-                // self.skulist = res;
+                // console.log(res)
+                
 
             });
         },
@@ -458,10 +296,8 @@ new Vue({
         // },
         vmodelSkuStatus: function(skuid, value){
             var self = this;
-            console.log(skuid)
             if(skuid) {
                var target = _.find(self.skulist, function(sku){
-                console.log(sku.barcode)
                 return sku.barcode == skuid
                 })
                 target.skuStatus = value; 

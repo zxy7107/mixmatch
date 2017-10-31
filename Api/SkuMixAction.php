@@ -45,7 +45,7 @@ if(!empty($_REQUEST['action'])) {
 
 		$photo = "../upload/NoImage.jpg"; 
 		$photoModel = "../upload/NoImage.jpg"; 
-		if ($_FILES['photo']['name'] != ''){
+		if ($_FILES['photo'] && $_FILES['photo']['name'] != ''){
 			/*--  实例化上传类  --*/
 			$file = $_FILES['photo'];
 			$upload_path = '../upload';
@@ -61,7 +61,7 @@ if(!empty($_REQUEST['action'])) {
 			$photo = $pic['path']."/".$pic['savename']; 
 		}
 		$skuMix->setPhoto($photo);
-		if ($_FILES['photoModel']['name'] != ''){
+		if ($_FILES['photoModel'] && $_FILES['photoModel']['name'] != ''){
 			/*--  实例化上传类  --*/
 			$file = $_FILES['photoModel'];
 			$upload_path = '../upload';

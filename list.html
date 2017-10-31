@@ -385,7 +385,7 @@
                                         <input class="text updatephoto" type="file" style="width:200px" value="" name="photo">
                                         <img class="skuphoto" :src="sku.photo">
                                     </td>
-                                    <td class="left aligned" @click.once="activeDropdown">
+                                    <td class="left aligned" >
                                         <skustatusselection :selectedvalue="sku.skuStatus" :skuid="sku.barcode" @changeskustatus="vmodelSkuStatus"></skustatusselection>
                                     </td>
                                     <td>

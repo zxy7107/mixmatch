@@ -137,7 +137,7 @@ class SkuService {
 	}
 
 	function QueryAllSkuList() {
-		$sql = "select * from t_sku";
+		$sql = "select * from t_sku order by barcode desc";
 		$sqlHelper = new SqlHelper ();
 		$res = $sqlHelper->execute_dql2 ( $sql );
 		// 关闭连接
