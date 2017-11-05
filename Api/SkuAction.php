@@ -23,6 +23,7 @@ if(!empty($_REQUEST['action'])) {
 		
 		// $sku->setBarcode($array_sku['barcode']);
 		$sku->setSkuName($_POST['skuName']);
+		$sku->setSkuLink($_POST['skuLink']);
 		$sku->setSkuType($_POST['skuType']);
 		$sku->setSkuStatus($_POST['skuStatus']);
 		$sku->setChannel($_POST['channel']);

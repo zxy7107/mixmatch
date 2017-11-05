@@ -7,6 +7,7 @@ class Sku {
 	private $barcode;
 	/*图书名称*/
 	private $skuName;
+	private $skuLink;
 	/*图书所在类别*/
 	private $skuType;
 	private $skuStatus;
@@ -47,6 +48,12 @@ class Sku {
 	 */
 	public function getSkuName() {
 		return $this->skuName;
+	}
+	/**
+	 * @return the $skuLink
+	 */
+	public function getSkuLink() {
+		return $this->skuLink;
 	}
 
 	/**
@@ -97,6 +104,12 @@ class Sku {
 	 */
 	public function setSkuName($skuName) {
 		$this->skuName = $skuName;
+	}
+	/**
+	 * @param field_type $skuLink
+	 */
+	public function setSkuLink($skuLink) {
+		$this->skuLink = $skuLink;
 	}
 
 	/**

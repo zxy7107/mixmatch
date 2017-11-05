@@ -99,6 +99,14 @@ body {
     .ui.fixed.table td {
         overflow: initial;
     }
+    input.update {
+        font-size:  initial;
+        position: absolute;
+        z-index: 9;
+    }
+    .ui.corner.label {
+        z-index: 80;
+    }
     /*td.skuselectiontd {
         position: fixed;
         z-index: 1010;
@@ -193,8 +201,9 @@ body {
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="left aligned">
-                                    <input class="text" type="file" style="width:200px" value="" name="photo" id="photo">
+                                     <td class="left aligned">
+                                        <input class="text" type="file" style="width:200px" value="" name="photo" id="photo">
+                                    </td>
                                     <td class="left aligned">
                                         <input class="text" type="file" style="width:200px" value="" name="photoModel" id="photoModel">
                                     </td>
@@ -228,25 +237,30 @@ body {
             </div>
         </div>
         <div class="ui one cards">
-            <div v-for="skumix in skumixlist" class="ui card">
+            <div v-for="skumix in skumixlist" class="ui card skumixid" :data-skumixid="skumix.id">
+                <p style="position:absolute;z-index:99;right:0;top:80px;">{{skumix.id}}</p>
                 <div class="ui corner label">
                     <i class="asterisk icon" @click="togglePhotoModel"></i>
                 </div>
-                <div class="ui move reveal image canclick">
+                <div class="ui move reveal image canclick test">
                     <div class="visible content">
+                        <input class="text update updatephoto" type="file" style="width:200px" value="" name="photo" placeholder="上传我的搭配">
                         <img class="ui fluid image" :src="skumix.photo">
                     </div>
                     <div class="hidden content">
+                        <input class="text update updatephotomodel" type="file" style="width:200px" value="" name="photoModel" placeholder="上传原版搭配">
                         <img class="ui fluid image" :src="skumix.photoModel">
                     </div>
                 </div>
                 <div class="extra content">
                     <div data-rating="4" class="ui star rating left floated"><i class="icon active"></i><i class="icon active"></i><i class="icon active"></i><i class="icon active"></i></div>
+                    <button class="ui button orange mini" @click="updateSkuMix">更新</button>
                     <span class="right floated" @click="toggleView"><i class="align justify icon"></i></span>
                 </div>
                 <div class="content transition sku">
                     <div class="ui three column grid">
-                        <div v-for="sku in skumix.skuMixArray" class="column">
+                        <div v-for="sku in skumix.skuMixArray" :data-skumixid="skumix.id" :data-skuid="sku.barcode" class="column" @click="removeSku">
+                            <p style="position:absolute;top:0;left:0;">{{sku.barcode}}  ￥{{sku.price}}</p>
                             <div class="ui segment">
                                 <img :src="sku.photo">
                                 <div class="ui dimmer">
@@ -265,6 +279,11 @@ body {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                          <div class="column">
+                            <div class="ui segment">
+                                <skuselection :skulistprop="skulistavailable" :skumixid="skumix.id" @skuselected="skuSelectionHandler"></skuselection>
                             </div>
                         </div>
                     </div>

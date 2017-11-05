@@ -31,7 +31,9 @@ var SkuSelection = {
         var self = this;
         $(self.$el).dropdown('set selected', self.selectedvalue).dropdown({
             onChange: function(value, text, $selectedItem) {
-                self.$emit('skuselected', self.skumixid, value)
+                self.$emit('skuselected', self.skumixid, value);
+                // $(self.$el).dropdown('setting', 'set selected', '');
+
             }
         });
     },
@@ -92,6 +94,7 @@ new Vue({
     // })
     },
     methods: {
+
         toggleView: function(e){
             e.preventDefault();
             e.stopPropagation();
@@ -109,6 +112,7 @@ new Vue({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
                 url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
+                // url: "http://192.168.0.104/mixmatch/Api/GetSkuList.php",
                 data: {}
             }).always(function(res) {
                 //假数据START
@@ -133,6 +137,7 @@ new Vue({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
                 url: "http://192.168.1.5/mixmatch/Api/GetSkuMixList.php",
+                // url: "http://192.168.0.104/mixmatch/Api/GetSkuMixList.php",
                 data: {}
             }).always(function(res) {
                 //假数据START
@@ -164,6 +169,7 @@ new Vue({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=add",
                 url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=add",
+                // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=add",
                 // data: {
                 //     sku: formData
                 // },
@@ -180,7 +186,7 @@ new Vue({
                     alert('error')
                    
                 }
-                // self.getSkuList(); 
+                self.getSkuMixList(); 
                 
 
             });
@@ -189,55 +195,61 @@ new Vue({
             var self = this;
             if(!skuMixId) {
                 self.newskumix.skuMix = skuMix;
+            } else {
+                var target = _.find(self.skumixlist, function(skumix){
+                    if(skumix.id == skuMixId) {
+                        console.log(skumix.skuMix)
+                        console.log(skuMix)
+                        skumix.skuMix =  skumix.skuMix  + ',' + skuMix;
+                        console.log(skumix)
+                        return true;
+                    }
+                    // return skumix.id == skuMixId
+                })
+                console.log('====')
+                console.log(target)
+                // console.log(target.skuMix)
+                // console.log(skuMix)
+                // var res = _.union(target.skuMix,skuMix);
+
+                // console.log(res)
+
+                self.updateSkuMixArraySingle(skuMixId);
             }
 
         },
-        updateSku: function(e) {
+        removeSku: function(e){
             var self = this;
-            var barcode = $(e.target).closest('tr').attr('data-skuid');
-            var photoinput = $(e.target).closest('tr').find('.updatephoto');
-            var target = _.find(self.skulist, function(sku){
-                return sku.barcode == barcode
-            })
+            var skumixid = $(e.target).closest('.column').attr('data-skumixid');
+            var skuid = $(e.target).closest('.column').attr('data-skuid');
 
-            var formData = new FormData();
-            formData.append("barcode", barcode);
-            formData.append("skuName", target.skuName);
-            formData.append("skuType", target.skuType);
-            formData.append("skuStatus", target.skuStatus);
-            formData.append("channel", target.channel);
-            formData.append("brand", target.brand);
-            formData.append("size", target.size);
-            formData.append("price", target.price);
-            formData.append("purchaseDate", target.purchaseDate);
-            // HTML 文件类型input，由用户选择
-            if(photoinput[0].files[0]) {
-                formData.append("photo", photoinput[0].files[0]);
-            } else {
-                formData.append("photo", target.photo);
-            }
+            var target = _.find(self.skumixlist, function(skumix){
+                    if(skumix.id == skumixid) {
+                        skumix.skuMix =  skumix.skuMix.replace(skuid, '');
+                        console.log(skumix)
+                        return true;
+                    }
+                })
+                self.updateSkuMixArraySingle(skumixid);
 
+
+
+        },
+        updateSkuMixArraySingle: function(skuMixId){
+            var self = this;
+            var target = _.find(self.skumixlist, function(skumix){
+                    return skumix.id == skuMixId
+                    })
+            console.log(target)
             $.ajax({
                 method: "POST",
-                // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=update",
-                url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=update",
-                data: formData,
-                processData: false,
-                contentType: false
-                // data: {
-                //     sku: {
-                //         barcode: barcode,
-                //         skuName: target.skuName,
-                //         skuType: target.skuType,
-                //         skuStatus: target.skuStatus,
-                //         channel: target.channel,
-                //         brand: target.brand,
-                //         size: target.size,
-                //         price: target.price,
-                //         photo: target.photo,
-                //         purchaseDate: target.purchaseDate
-                //     }
-                // }
+                // url: "http://127.0.0.1/mixmatch/Api/SkuMixAction.php?action=updatesingle",
+                url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=updatesingle",
+                // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=updatesingle",
+                data: {
+                    id: target.id,
+                    skuMix: target.skuMix
+                },
             }).always(function(res) {
                 //假数据START
                 // res ={
@@ -268,7 +280,91 @@ new Vue({
                 //     }
                 //假数据END
                 // console.log(res)
-                self.getSkuList();
+                self.getSkuMixList();
+
+            });
+        },
+        updateSkuMix: function(e) {
+            var self = this;
+            var id = $(e.target).closest('.skumixid').attr('data-skumixid');
+            var photoinput = $(e.target).parent().siblings('.test').find('.updatephoto');
+
+
+            console.log(photoinput)
+            var photomodelinput = $(e.target).parent().siblings('.test').find('.updatephotomodel')
+            console.log(self.skumixlist)
+
+            var target = _.find(self.skumixlist, function(skumix){
+                // console.log(skumix)
+                console.log(id)
+                return skumix.id == id
+            })
+
+            console.log(target)
+
+
+
+            var formData = new FormData();
+            formData.append("id", id);
+            formData.append("skuMixName", target.skuMixName);
+            formData.append("skuMixType", target.skuMixType);
+            formData.append("skuMix", target.skuMix);
+            formData.append("skuMixStatus", target.skuMixStatus);
+            formData.append("channel", target.channel);
+            formData.append("size", target.size);
+            formData.append("price", target.price);
+            // HTML 文件类型input，由用户选择
+            if(photoinput[0].files[0]) {
+                formData.append("photo", photoinput[0].files[0]);
+            } else {
+                formData.append("photo", target.photo);
+            }
+
+            if(photomodelinput[0].files[0]) {
+                formData.append("photoModel", photomodelinput[0].files[0]);
+            } else {
+                formData.append("photoModel", target.photoModel);
+            }
+
+            $.ajax({
+                method: "POST",
+                // url: "http://127.0.0.1/mixmatch/Api/SkuMixAction.php?action=update",
+                url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=update",
+                // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=update",
+                data: formData,
+                processData: false,
+                contentType: false
+            }).always(function(res) {
+                //假数据START
+                // res ={
+                //     "result":[
+                //         {
+                //             "name":"1D风险价值",
+                //             "per95":"0.64",
+                //             "per99":"0.63"
+                //         },
+                //         {
+                //             "name":"1D预期收益不足",
+                //             "per95":"0.64",
+                //             "per99":"0.52"
+                //         },
+                //         {
+                //             "name":"10D风险价值",
+                //             "per95":"0.44",
+                //             "per99":"0.63"
+                //         },
+                //         {
+                //             "name":"10D预期收益不足",
+                //             "per95":"0.78",
+                //             "per99":"0.63"
+                //         }],
+                //         "code":"",
+                //         "resultMassage":"",
+                //         "success":true
+                //     }
+                //假数据END
+                // console.log(res)
+                self.getSkuMixList();
 
             });
         },
@@ -279,6 +375,7 @@ new Vue({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
                 url: "http://192.168.1.5/mixmatch/Api/GetSku.php",
+                // url: "http://192.168.0.104/mixmatch/Api/GetSku.php",
                 data: {}
             }).always(function(res) {
                 //假数据START
@@ -289,34 +386,34 @@ new Vue({
 
             });
         },
-        // toggleModal: function(){
-        //     var self = this;
-        //     $('.ui.modal').modal('show');
+        // // toggleModal: function(){
+        // //     var self = this;
+        // //     $('.ui.modal').modal('show');
 
-        // },
-        vmodelSkuStatus: function(skuid, value){
-            var self = this;
-            if(skuid) {
-               var target = _.find(self.skulist, function(sku){
-                return sku.barcode == skuid
-                })
-                target.skuStatus = value; 
-                // self.updateSku();
-            // var barcode = $(e.target).closest('tr').attr('data-skuid');
-                $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
-            } else {
-                //新增sku
-                self.newsku.skuStatus = value;
-            }
+        // // },
+        // vmodelSkuStatus: function(skuid, value){
+        //     var self = this;
+        //     if(skuid) {
+        //        var target = _.find(self.skulist, function(sku){
+        //         return sku.barcode == skuid
+        //         })
+        //         target.skuStatus = value; 
+        //         // self.updateSku();
+        //     // var barcode = $(e.target).closest('tr').attr('data-skuid');
+        //         $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
+        //     } else {
+        //         //新增sku
+        //         self.newsku.skuStatus = value;
+        //     }
             
-        },
-        cancelSku: function(){
-            var self = this;
-            self.getSkuList();
-        },
-        deleteSku: function(){
-            var self = this;
-        }
+        // },
+        // cancelSku: function(){
+        //     var self = this;
+        //     self.getSkuList();
+        // },
+        // deleteSku: function(){
+        //     var self = this;
+        // }
 
     }
 })

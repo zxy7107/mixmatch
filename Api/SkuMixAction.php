@@ -43,6 +43,27 @@ if(!empty($_REQUEST['action'])) {
 
 		$skuMix->setPrice($_POST['price']);
 
+
+		
+		if ($_FILES['photoModel'] && $_FILES['photoModel']['name'] != ''){
+			/*--  实例化上传类  --*/
+			$file = $_FILES['photoModel'];
+			$upload_path = '../upload';
+			$allow_type = array('jpg','bmp','png','gif','jpeg');
+			// $max_size=2048000;
+			$max_size=5120000;
+			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
+
+			$upload->upload();
+
+			$pic = $upload->getSaveFileInfo();
+			// $photo = substr($pic['path'], 2)."/".$pic['savename']; 
+			$photo = $pic['path']."/".$pic['savename']; 
+		}
+		$skuMix->setPhotoModel($photoModel);
+		
+
+
 		$photo = "../upload/NoImage.jpg"; 
 		$photoModel = "../upload/NoImage.jpg"; 
 		if ($_FILES['photo'] && $_FILES['photo']['name'] != ''){
@@ -61,23 +82,7 @@ if(!empty($_REQUEST['action'])) {
 			$photo = $pic['path']."/".$pic['savename']; 
 		}
 		$skuMix->setPhoto($photo);
-		if ($_FILES['photoModel'] && $_FILES['photoModel']['name'] != ''){
-			/*--  实例化上传类  --*/
-			$file = $_FILES['photoModel'];
-			$upload_path = '../upload';
-			$allow_type = array('jpg','bmp','png','gif','jpeg');
-			// $max_size=2048000;
-			$max_size=5120000;
-			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
 
-			$upload->upload();
-
-			$pic = $upload->getSaveFileInfo();
-			// $photo = substr($pic['path'], 2)."/".$pic['savename']; 
-			$photo = $pic['path']."/".$pic['savename']; 
-		}
-		$skuMix->setPhotoModel($photoModel);
-		
 		//完成添加->数据库
 		$res = $skuMixService->AddSkuMix($skuMix);
 		if($res==1) {
@@ -141,64 +146,102 @@ if(!empty($_REQUEST['action'])) {
 		
 		
 		
-	// } else if($action == "update") {
-	// 	//说明用户希望执行更新图书信息   
-	// 	// $array_sku = $_POST['sku']; 
-	// 	$sku = $skuService->GetSku($_POST['barcode']);
+	// } 
+	// 
+	else if($action == "update") {
+		//说明用户希望执行更新图书信息   
+		// $array_sku = $_POST['sku']; 
+		$skuMix = $skuMixService->GetSkuMix($_POST['id']);
 		
-	// 	$sku->setBarcode($_POST['barcode']);
-	// 	$sku->setSkuName($_POST['skuName']);
-	// 	$sku->setSkuType($_POST['skuType']);
-	// 	$sku->setSkuStatus($_POST['skuStatus']);
-	// 	$sku->setChannel($_POST['channel']);
-	// 	$sku->setBrand($_POST['brand']);
-	// 	$sku->setSize($_POST['size']);
-	// 	$sku->setPrice($_POST['price']);
-	// 	$sku->setPurchaseDate($_POST['purchaseDate']);
+		$skuMix->setId($_POST['id']);
+		$skuMix->setSkuMixName($_POST['skuMixName']);
+		$skuMix->setSkuMixType($_POST['skuMixType']);
+		$skuMix->setSkuMix($_POST['skuMix']);
+		$skuMix->setSkuMixStatus($_POST['skuMixStatus']);
+		$skuMix->setPrice($_POST['price']);
 		
-	// 	/*处理图片上传*/
-	// 	require_once("../util/upload.class.php");
-	// 	require_once("../util/util.php"); 
-	// 	if(isset($_POST['photo'])) {
-	// 		$sku->setPhoto($_POST['photo']);
+		/*处理图片上传*/
+		require_once("../util/upload.class.php");
+		require_once("../util/util.php"); 
 
-	// 	} else if($_FILES['photo']['name'] != ''){
-	// 		/*--  实例化上传类  --*/
-	// 		$file = $_FILES['photo'];
-	// 		$upload_path = '../upload';
+		if(isset($_POST['photo'])) {
+			$skuMix->setPhoto($_POST['photo']);
 
-	// 		$allow_type = array('jpg','bmp','png','gif','jpeg');
-	// 		// $max_size=2048000;
-	// 		$max_size=5120000;
-	// 	var_dump($file);
-	// 		$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
-	// 		var_dump($upload);
-	// 		$upload->upload();
-	// 		$pic = $upload->getSaveFileInfo(); 
-	// 		var_dump($pic);
+		} else if($_FILES['photo']['name'] != ''){
+			/*--  实例化上传类  --*/
+			$file = $_FILES['photo'];
+			$upload_path = '../upload';
 
-	// 		$photo = $pic['path']."/".$pic['savename']; 
-	// 		// $photo = substr($pic['path'], 2)."/".$pic['savename'];
-	// 		$sku->setPhoto($photo);
-	// 	}
-	 
-	// 	//完成修改->数据库
-	// 	$res = $skuService->UpdateSku($sku);
-	// 	print_r($sku);
-	// 	if($res != 0 ) {
-	// 		// header("Location: ../ok.php");
-	// 		header('Content-type: text/json;charset=utf-8');
-	// 		$object = (object) [
-	// 	    'result' => 'OK',
-	// 	    'success' => true,
-	// 	  ];
-	// 		exit();
-	// 	} else {
-	// 		//失败
-	// 		header("Location: ../error.php");
-	// 		exit();
-	// 	}  	
-	// } else if($action == "del") {
+			$allow_type = array('jpg','bmp','png','gif','jpeg');
+			// $max_size=2048000;
+			$max_size=5120000;
+		// var_dump($file);
+			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
+			// var_dump($upload);
+			$upload->upload();
+			$pic = $upload->getSaveFileInfo(); 
+			// var_dump($pic);
+
+			$photo = $pic['path']."/".$pic['savename']; 
+			// $photo = substr($pic['path'], 2)."/".$pic['savename'];
+			$skuMix->setPhoto($photo);
+		}
+
+
+		if(isset($_POST['photoModel'])) {
+			$skuMix->setPhotoModel($_POST['photoModel']);
+
+		} else if($_FILES['photoModel']['name'] != ''){
+			/*--  实例化上传类  --*/
+			$file = $_FILES['photoModel'];
+			$upload_path = '../upload';
+
+			$allow_type = array('jpg','bmp','png','gif','jpeg');
+			// $max_size=2048000;
+			$max_size=5120000;
+		// var_dump($file);
+			$upload = new upFiles($file, $upload_path, $max_size, $allow_type);
+			// var_dump($upload);
+			$upload->upload();
+			$pic = $upload->getSaveFileInfo(); 
+			// var_dump($pic);
+
+			$photoModel = $pic['path']."/".$pic['savename']; 
+			// $photo = substr($pic['path'], 2)."/".$pic['savename'];
+			print_r($photoModel);
+			$skuMix->setPhotoModel($photoModel);
+		}
+	}
+	else if($action == "updatesingle") {
+		// 说明用户希望执行更新图书信息   
+		// $array_sku = $_POST['sku']; 
+		$skuMix = $skuMixService->GetSkuMix($_POST['id']);
+		
+		$skuMix->setId($_POST['id']);
+		// $skuMix->setSkuMixName($_POST['skuMixName']);
+		// $skuMix->setSkuMixType($_POST['skuMixType']);
+		$skuMix->setSkuMix($_POST['skuMix']);
+		// $skuMix->setSkuMixStatus($_POST['skuMixStatus']);
+		// $skuMix->setPrice($_POST['price']);
+		
+		$res = $skuMixService->UpdateSkuMixSingle($skuMix);
+		print_r($skuMix);
+		if($res != 0 ) {
+			// header("Location: ../ok.php");
+			header('Content-type: text/json;charset=utf-8');
+			$object = (object) [
+		    'result' => 'OK',
+		    'success' => true,
+		  ];
+			exit();
+		} else {
+			//失败
+			header("Location: ../error.php");
+			exit();
+		}  	
+	} 
+	// 
+	// else if($action == "del") {
 	// 	//这时我们知道要删除图书信息
 	// 	$barcode = $_GET['barcode'];
 	// 	if($skuService->DeleteBook($barcode) == 1) {

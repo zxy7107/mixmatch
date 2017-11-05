@@ -20,10 +20,10 @@ class SkuMix {
 
 
 	/**
-	 * @return the $barcode
+	 * @return the $id
 	 */
-	public function getBarcode() {
-		return $this->barcode;
+	public function getId() {
+		return $this->id;
 	}
 
 	/**
@@ -71,10 +71,10 @@ class SkuMix {
 	}
 
 	/**
-	 * @param field_type $barcode
+	 * @param field_type $id
 	 */
-	public function setBarcode($barcode) {
-		$this->barcode = $barcode;
+	public function setId($id) {
+		$this->id = $id;
 	}
 
 	/**

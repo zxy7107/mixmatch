@@ -32,61 +32,85 @@ class SkuMixService {
 	}
 	
 	// /*更新图书信息*/
-	// function UpdateSku(Sku $sku) {
-
-	// 	$sku_barcode = $sku->getBarcode();
-	// 	$sku_skuName = $sku->getSkuName();
-	// 	$sku_skuType = $sku->getSkuType();
-	// 	$sku_skuStatus = $sku->getSkuStatus();
-	// 	$sku_price = $sku->getPrice();
-	// 	$sku_channel = $sku->getChannel();
-	// 	$sku_brand = $sku->getBrand();
-	// 	$sku_size = $sku->getSize();
-	// 	$sku_photo = $sku->getPhoto();
-	// 	$sku_purchaseDate = $sku->getPurchaseDate();
-		
-	// 	$sql = "update t_Sku set skuName='$sku_skuName'";
-	// 	$sql = $sql.",skuType=$sku_skuType";
-	// 	$sql = $sql.",skuStatus='$sku_skuStatus'";
-	// 	$sql = $sql.",price=$sku_price";
-	// 	$sql = $sql.",channel='$sku_channel'";
-	// 	$sql = $sql.",brand='$sku_brand'";
-	// 	$sql = $sql.",size='$sku_size'";
-	// 	$sql = $sql.",photo='$sku_photo'";
-	// 	$sql = $sql.",purchaseDate='$sku_purchaseDate'";
-	// 	$sql = $sql." where barcode='$sku_barcode'";
-		
-	// 	var_dump($sql); 
-	// 	$sqlHelper = new SqlHelper ();
-		 
-	// 	$res = $sqlHelper->execute_dml ( $sql );
-		
-	// 	$sqlHelper->close_connect ();
-	// 	return $res;
-	// }
 	
-	// // 根据图书条形码获取图书信息
-	// function GetSku($barcode) {
-	// 	$sql = "select * from t_Sku where barcode='$barcode'";
-	// 	$sqlHelper = new SqlHelper ();
-	// 	$arr = $sqlHelper->execute_dql2 ( $sql );
-	// 	$sqlHelper->close_connect ();
-	// 	// 二次封装,$arr=>Sku对象实例
-	// 	$sku = new Sku();
-	// 	if(count($arr)>0) {
-	// 		$sku->setBarcode($barcode);
-	// 		$sku->setSkuName($arr [0] ['skuName']);
-	// 		$sku->setSkuType($arr [0] ['skuType']);
-	// 		$sku->setSkuStatus($arr [0] ['skuStatus']);
-	// 		$sku->setChannel($arr [0] ['channel']);
-	// 		$sku->setPhoto($arr [0] ['photo']);
-	// 		$sku->setBrand($arr [0] ['brand']);
-	// 		$sku->setSize($arr [0] ['size']);
-	// 		$sku->setPrice($arr [0] ['price']);
-	// 		$sku->setPurchaseDate($arr [0] ['purchaseDate']);
-	// 	}
-	// 	return $sku;
-	// }
+	function UpdateSkuMix(SkuMix $skuMix) {
+
+		$skuMix_id = $skuMix->getId();
+		$skuMix_skuMixName = $skuMix->getSkuMixName();
+		$skuMix_skuMixType = $skuMix->getSkuMixType();
+		$skuMix_skuMix = $skuMix->getSkuMix();
+		$skuMix_skuMixStatus = $skuMix->getSkuMixStatus();
+		$skuMix_price = $skuMix->getPrice();
+		$skuMix_photo = $skuMix->getPhoto();
+		$skuMix_photoModel = $skuMix->getPhotoModel();
+		
+		$sql = "update t_SkuMix set skuMixName='$skuMix_skuMixName'";
+		$sql = $sql.",skuMixType=$skuMix_skuMixType";
+		$sql = $sql.",skuMixStatus='$skuMix_skuMixStatus'";
+		$sql = $sql.",skuMix='$skuMix_skuMix'";
+		$sql = $sql.",price=$skuMix_price";
+		$sql = $sql.",photo='$skuMix_photo'";
+		$sql = $sql.",photoModel='$skuMix_photoModel'";
+		$sql = $sql." where id='$skuMix_id'";
+		
+		var_dump($sql); 
+		$sqlHelper = new SqlHelper ();
+		 
+		$res = $sqlHelper->execute_dml ( $sql );
+		
+		$sqlHelper->close_connect ();
+		return $res;
+	}
+	function UpdateSkuMixSingle(SkuMix $skuMix) {
+
+		$skuMix_id = $skuMix->getId();
+		// $skuMix_skuMixName = $skuMix->getSkuMixName();
+		// $skuMix_skuMixType = $skuMix->getSkuMixType();
+		$skuMix_skuMix = $skuMix->getSkuMix();
+		// $skuMix_skuMixStatus = $skuMix->getSkuMixStatus();
+		// $skuMix_price = $skuMix->getPrice();
+		// $skuMix_photo = $skuMix->getPhoto();
+		// $skuMix_photoModel = $skuMix->getPhotoModel();
+		
+		// $sql = "update t_SkuMix set skuMixName='$skuMix_skuMixName'";
+		$sql = "update t_SkuMix set ";
+		// $sql = $sql.",skuMixType=$skuMix_skuMixType";
+		// $sql = $sql.",skuMixStatus='$skuMix_skuMixStatus'";
+		$sql = $sql."skuMix='$skuMix_skuMix'";
+		// $sql = $sql.",price=$skuMix_price";
+		// $sql = $sql.",photo='$skuMix_photo'";
+		// $sql = $sql.",photoModel='$skuMix_photoModel'";
+		$sql = $sql." where id='$skuMix_id'";
+		
+		var_dump($sql); 
+		$sqlHelper = new SqlHelper ();
+		 
+		$res = $sqlHelper->execute_dml ( $sql );
+		
+		$sqlHelper->close_connect ();
+		return $res;
+	}
+	
+	// 根据图书条形码获取图书信息
+	function GetSkuMix($id) {
+		$sql = "select * from t_SkuMix where id='$id'";
+		$sqlHelper = new SqlHelper ();
+		$arr = $sqlHelper->execute_dql2 ( $sql );
+		$sqlHelper->close_connect ();
+		// 二次封装,$arr=>SkuMix对象实例
+		$skuMix = new SkuMix();
+		if(count($arr)>0) {
+			$skuMix->setId($id);
+			$skuMix->setSkuMixName($arr [0] ['skuMixName']);
+			$skuMix->setSkuMix($arr [0] ['skuMix']);
+			$skuMix->setSkuMixType($arr [0] ['skuMixType']);
+			$skuMix->setSkuMixStatus($arr [0] ['skuMixStatus']);
+			$skuMix->setPhoto($arr [0] ['photo']);
+			$skuMix->setPhotoModel($arr [0] ['photoModel']);
+			$skuMix->setPrice($arr [0] ['price']);
+		}
+		return $skuMix;
+	}
 
 
 	

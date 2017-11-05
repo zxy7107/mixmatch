@@ -11,6 +11,7 @@ class SkuService {
 		
 		// $sku_barcode = $sku->getBarcode();
 		$sku_skuName = $sku->getSkuName();
+		$sku_skuLink = $sku->getSkuLink();
 		$sku_skuType = $sku->getSkuType();
 
 		$sku_skuStatus = $sku->getSkuStatus();
@@ -22,8 +23,8 @@ class SkuService {
 		$sku_photo = $sku->getPhoto(); 
 		// 构建sql语句 
 		// $sql = "insert into t_Sku(barcode,bookName,bookType,price,count,publish,publishDate,photo) values ('$book_barcode','$book_bookName',$book_bookType,$book_price,$book_count,'$book_publish','$book_publishDate','$book_photo')";
-		$sql = "insert into t_Sku(skuName,skuType,skuStatus, price,channel,brand, size,purchaseDate,photo) 
-		values ('$sku_skuName','$sku_skuType','$sku_skuStatus', $sku_price,'$sku_channel','$sku_brand','$sku_size','$sku_purchaseDate','$sku_photo')";
+		$sql = "insert into t_Sku(skuLink, skuName,skuType,skuStatus, price,channel,brand, size,purchaseDate,photo) 
+		values ('$sku_skuLink','$sku_skuName','$sku_skuType','$sku_skuStatus', $sku_price,'$sku_channel','$sku_brand','$sku_size','$sku_purchaseDate','$sku_photo')";
 		  
 		$sqlHelper = new SqlHelper ();
 		$res = $sqlHelper->execute_dml ( $sql );
@@ -56,7 +57,6 @@ class SkuService {
 		$sql = $sql.",purchaseDate='$sku_purchaseDate'";
 		$sql = $sql." where barcode='$sku_barcode'";
 		
-		var_dump($sql); 
 		$sqlHelper = new SqlHelper ();
 		 
 		$res = $sqlHelper->execute_dml ( $sql );
