@@ -13,79 +13,95 @@ $('.asterisk.icon').on('click', function() {
 
 })
 $('.ui.sticky').sticky();
-$('tr').on('click', function(){
-  window.location.href = "./detail.html"
+$('tr').on('click', function() {
+    window.location.href = "./detail.html"
 })
 
 Vue.component('demo-grid', {
-  template: '#grid-template',
-  replace: true,
-  props: {
-    // data: Array,
-    columns: Array,
-    filterKey: String,
-    skulist: Array,
-  },
-  data: function () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
-    return {
-      sortKey: '',
-      sortOrders: sortOrders,
-    }
-  },
-  computed: {
-    filteredData: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var data = this.skulist
-      if (filterKey) {
-        data = data.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
+    template: '#grid-template',
+    replace: true,
+    props: {
+        // data: Array,
+        columns: Array,
+        filterKey: String,
+        skulist: Array,
+        filterStatus: String
+    },
+    data: function() {
+        var sortOrders = {}
+        this.columns.forEach(function(key) {
+            sortOrders[key] = 1
         })
-      }
-      if (sortKey) {
-        data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
-        })
-      }
-      console.log('filteredData::::')
-      console.log(data)
-      return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-  },
-  mounted: function() {
-    var self = this;
-    // self.getSkuList();
+        return {
+            sortKey: '',
+            sortOrders: sortOrders,
+        }
+    },
+    computed: {
+        filteredData: function() {
+            var self = this;
+            var sortKey = this.sortKey
+            var filterKey = this.filterKey && this.filterKey.toLowerCase()
+            var order = this.sortOrders[sortKey] || 1
+            var data = this.skulist
+            if (filterKey) {
+                data = data.filter(function(row) {
+                    return Object.keys(row).some(function(key) {
+                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                    })
+                })
+            }
+            if(this.filterStatus) {
+                data = data.filter(function(row){
+                    return row.skuStatus == self.filterStatus
+                })
+            }
+            if (sortKey) {
+                if (sortKey == 'price') {
+                    data = data.slice().sort(function(a, b) {
+                        a = parseFloat(a[sortKey])
+                        b = parseFloat(b[sortKey])
+                        return (a === b ? 0 : a > b ? 1 : -1) * order
+                    })
+                } else {
+                    data = data.slice().sort(function(a, b) {
+                        a = a[sortKey]
+                        b = b[sortKey]
+                        return (a === b ? 0 : a > b ? 1 : -1) * order
+                    })
+                }
+
+            }
+            console.log('filteredData::::')
+            console.log(data)
+            return data
+        }
+    },
+    filters: {
+        capitalize: function(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1)
+        }
+    },
+    mounted: function() {
+        var self = this;
+        // self.getSkuList();
 
 
-},
-
-  methods: {
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
     },
 
-       
+    methods: {
+        sortBy: function(key) {
+            this.sortKey = key
+            this.sortOrders[key] = this.sortOrders[key] * -1
+        },
+
+
 
         updateSku: function(e) {
             var self = this;
             var barcode = $(e.target).closest('tr').attr('data-skuid');
             var photoinput = $(e.target).closest('tr').find('.updatephoto');
-            var target = _.find(self.skulist, function(sku){
+            var target = _.find(self.skulist, function(sku) {
                 return sku.barcode == barcode
             })
 
@@ -101,14 +117,14 @@ Vue.component('demo-grid', {
             formData.append("purchaseDate", target.purchaseDate);
             // HTML 文件类型input，由用户选择
             console.log(photoinput[0].files)
-            if(photoinput[0].files[0]) {
+            if (photoinput[0].files[0]) {
                 formData.append("photo", photoinput[0].files[0]);
             } else {
                 formData.append("photo", target.photo);
             }
             console.log(target.photo)
 
-     
+
 
             $.ajax({
                 method: "POST",
@@ -134,34 +150,7 @@ Vue.component('demo-grid', {
                 // }
             }).always(function(res) {
                 //假数据START
-                // res ={
-                //     "result":[
-                //         {
-                //             "name":"1D风险价值",
-                //             "per95":"0.64",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"1D预期收益不足",
-                //             "per95":"0.64",
-                //             "per99":"0.52"
-                //         },
-                //         {
-                //             "name":"10D风险价值",
-                //             "per95":"0.44",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"10D预期收益不足",
-                //             "per95":"0.78",
-                //             "per99":"0.63"
-                //         }],
-                //         "code":"",
-                //         "resultMassage":"",
-                //         "success":true
-                //     }
                 //假数据END
-                // alert(JSON.stringify(res));
                 console.log(res)
                 // self.getSkuList();
 
@@ -177,38 +166,38 @@ Vue.component('demo-grid', {
                 .dropdown('set selected', '5');
 
         },
-        vmodelSkuStatus: function(skuid, value){
+        vmodelSkuStatus: function(skuid, value) {
             var self = this;
             console.log(skuid)
-            if(skuid) {
-               var target = _.find(self.skulist, function(sku){
-                console.log(sku.barcode)
-                return sku.barcode == skuid
+            if (skuid) {
+                var target = _.find(self.skulist, function(sku) {
+                    console.log(sku.barcode)
+                    return sku.barcode == skuid
                 })
-                target.skuStatus = value; 
+                target.skuStatus = value;
                 // self.updateSku();
-            // var barcode = $(e.target).closest('tr').attr('data-skuid');
+                // var barcode = $(e.target).closest('tr').attr('data-skuid');
                 $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
             } else {
                 //新增sku
                 self.newsku.skuStatus = value;
             }
-            
+
         },
-        cancelSku: function(){
+        cancelSku: function() {
             var self = this;
             // self.getSkuList();
             self.$emit('renderList')
         },
-        deleteSku: function(){
+        deleteSku: function() {
             var self = this;
         }
-  }
+    }
 })
 
-Vue.component('sku-status-selects',{
+Vue.component('sku-status-selects', {
     template: '#sku-status-selects-template',
-    props: ['selectedvalue', 'skuid'],
+    props: ['selectedvalue', 'skuid', 'module'],
     data: function() {
         return {
             counter: 1,
@@ -222,15 +211,19 @@ Vue.component('sku-status-selects',{
     computed: {
         pageindex: function() {
             var self = this;
-            
+
             return tmp;
         }
     },
-    mounted: function(){
+    mounted: function() {
         var self = this;
         $(self.$el).dropdown('set selected', self.selectedvalue).dropdown({
             onChange: function(value, text, $selectedItem) {
-                self.$emit('changeskustatus', self.skuid, value)
+                if (self.skuid || self.module == 'newsku') {
+                    self.$emit('changeskustatus', self.skuid, value)
+                } else {
+                    self.$emit('filterstatus', value);
+                }
             }
         });
     },
@@ -245,26 +238,26 @@ Vue.component('sku-status-selects',{
 new Vue({
     el: '#app',
     data: {
+        filterStatus: '',
         searchQuery: '',
         // gridColumns: ['name', 'power'],
-        gridColumns: ['photo','skuStatus', 'skuName', 'size','price','brand','channel','purchaseDate','skuType'],
+        gridColumns: ['photo', 'skuStatus', 'skuName', 'size', 'price', 'brand', 'channel', 'purchaseDate', 'skuType'],
         // gridData: [
         //   { name: 'Chuck Norris', power: Infinity },
         //   { name: 'Bruce Lee', power: 9000 },
         //   { name: 'Jackie Chan', power: 7000 },
         //   { name: 'Jet Li', power: 8000 }
         // ],
-      newsku: {},
-      skulist: []
-        
+        newsku: {},
+        skulist: []
+
     },
     computed: {
         // token: function() {
         //     return getCookie('token')
         // }
     },
-    components: {
-    },
+    components: {},
     // created: function(){
     //     var self = this;
     //     if(!self.token) {
@@ -274,10 +267,12 @@ new Vue({
     mounted: function() {
         var self = this;
         self.getSkuList();
-
-
     },
     methods: {
+        fliterStatusData: function(value) {
+            var self = this;
+            self.filterStatus = value;
+        },
         getSkuList: function() {
             var self = this;
 
@@ -329,27 +324,33 @@ new Vue({
                 self.skulist = res;
             });
         },
-                vmodelSkuStatus2: function(skuid, value){
+        vmodelSkuStatus2: function(skuid, value) {
             var self = this;
-            console.log(skuid)
-            if(skuid) {
-               var target = _.find(self.skulist, function(sku){
-                console.log(sku.barcode)
-                return sku.barcode == skuid
+            if (skuid) {
+                var target = _.find(self.skulist, function(sku) {
+                    console.log(sku.barcode)
+                    return sku.barcode == skuid
                 })
-                target.skuStatus = value; 
+                target.skuStatus = value;
                 // self.updateSku();
-            // var barcode = $(e.target).closest('tr').attr('data-skuid');
+                // var barcode = $(e.target).closest('tr').attr('data-skuid');
                 $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
             } else {
                 //新增sku
                 self.newsku.skuStatus = value;
             }
-            
+
+        },
+        activeDropdown2: function(e) {
+            // $(e.target).closest('.ui.dropdown').dropdown('show');
+
+            // $('.ui.floating.labeled.dropdown.button')
+            $(e.target).closest('.ui.dropdown')
+                .dropdown('set selected', '5');
+
         },
 
-         
- 
+
         saveSku: function(e) {
             var self = this;
             var formData = new FormData();
@@ -373,22 +374,22 @@ new Vue({
                 // data: {
                 //     sku: formData
                 // },
-                data:formData,
+                data: formData,
                 processData: false,
                 contentType: false
             }).always(function(res) {
                 //假数据START
-                
+
                 //假数据END
                 alert(res.success)
 
-                if(res.success) {
-                   // self.newsku = {};
+                if (res.success) {
+                    // self.newsku = {};
                 } else {
                     alert('error')
-                   
+
                 }
-                self.getSkuList(); 
+                self.getSkuList();
 
             });
         },

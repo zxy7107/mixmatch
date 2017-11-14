@@ -308,7 +308,7 @@
         <tbody>
             <template v-for="entry in filteredData">
                 <tr :data-skuid="entry.barcode">
-                    <td class="left aligned " :class="entry.skuStatus != 1 ? 'unavailable': '' ">
+                    <td class="left aligned " :class="entry.skuStatus != 1 && entry.skuStatus != 3 ? 'unavailable': '' ">
                         <input class="text updatephoto" type="file" style="width:200px" value="" name="photo">
                         <a v-if="entry.skuLink" :href="entry.skuLink" target="_blank"><img class="skuphoto" :src="entry.photo"></a>
                         <img v-else class="skuphoto" :src="entry.photo">
@@ -432,8 +432,8 @@
                                 <td class="left aligned">
                                     <input class="text" type="file" style="width:200px" value="" name="photo" id="photo">
                                 </td>
-                                <td class="left aligned" @click.once="activeDropdown">
-                                    <sku-status-selects :selectedvalue="newsku.skuStatus" :skuid="0" @changeskustatus="vmodelSkuStatus2"></sku-status-selects>
+                                <td class="left aligned" @click.once="activeDropdown2">
+                                    <sku-status-selects :selectedvalue="newsku.skuStatus" :skuid="0" module="newsku" @changeskustatus="vmodelSkuStatus2"></sku-status-selects>
                                 </td>
                                 <td>
                                     <div class="ui fluid input transparent">
@@ -510,12 +510,14 @@
                 <div class="content transition sku">
 
                     <form id="search">
+                        <sku-status-selects selectedvalue="1" @filterstatus="fliterStatusData"></sku-status-selects>
                         Search <input name="query" v-model="searchQuery">
                     </form>
                     <demo-grid
                        :skulist="skulist"
                        :columns="gridColumns"
                        :filter-key="searchQuery"
+                       :filter-status="filterStatus"
                        @render-list="getSkuList"
                        >
                     </demo-grid>
