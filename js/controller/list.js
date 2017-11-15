@@ -190,8 +190,6 @@ Vue.component('demo-grid', {
                     return sku.barcode == skuid
                 })
                 target.skuStatus = value;
-                // self.updateSku();
-                // var barcode = $(e.target).closest('tr').attr('data-skuid');
                 $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
             } else {
                 //新增sku
@@ -232,13 +230,24 @@ Vue.component('sku-status-selects', {
     },
     mounted: function() {
         var self = this;
-        $(self.$el).dropdown('set selected', self.selectedvalue).dropdown({
+        $(self.$el).dropdown("set selected", self.selectedvalue).dropdown({
             onChange: function(value, text, $selectedItem) {
-                if (self.skuid || self.module == 'newsku') {
-                    self.$emit('changeskustatus', self.skuid, value)
-                } else {
-                    self.$emit('filterstatus', value);
+                alert(value)
+                alert(self.module)
+                switch(self.module) {
+                    case 'newsku' :
+                    case 'skulist':
+                        self.$emit('changeskustatus', self.skuid, value)
+                        break;
+                    default:
+                        self.$emit('filterstatus', value);
+                        break;
                 }
+                // if (self.skuid || self.module == 'newsku') {
+                //     self.$emit('changeskustatus', self.skuid, value)
+                // } else {
+                //     self.$emit('filterstatus', value);
+                // }
             }
         });
     },
@@ -378,11 +387,10 @@ new Vue({
 
         },
         activeDropdown2: function(e) {
-            // $(e.target).closest('.ui.dropdown').dropdown('show');
-
-            // $('.ui.floating.labeled.dropdown.button')
+           alert('activeDropdown2')
             $(e.target).closest('.ui.dropdown')
-                .dropdown('set selected', '5');
+                // .dropdown('set selected', '5');
+                .dropdown();
 
         },
 

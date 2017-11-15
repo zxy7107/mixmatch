@@ -383,8 +383,8 @@
                             <a v-if="entry.skuLink" :href="entry.skuLink" target="_blank"><img class="skuphoto" :src="entry.photo"></a>
                             <img v-else class="skuphoto" :src="entry.photo">
                         </td>
-                        <td class="left aligned" @click.once="activeDropdown">
-                            <sku-status-selects :selectedvalue="entry.skuStatus" :skuid="entry.barcode" @changeskustatus="vmodelSkuStatus"></sku-status-selects>
+                        <td class="left aligned">
+                            <sku-status-selects :selectedvalue="entry.skuStatus" :skuid="entry.barcode" @changeskustatus="vmodelSkuStatus" module="skulist"></sku-status-selects>
                         </td>
                         <td>
                             <div class="ui fluid input transparent">
@@ -443,8 +443,6 @@
                                 <button class="ui button orange " @click="updateSku">更新</button>
                                 <div class="or"></div>
                                 <button class="ui button red" @click="deleteSku">删除</button>
-                                <div class="or"></div>
-                                <button class="ui button grey" @click="cancelSku">取消</button>
                             </div>
                         </td>
                     </tr>
@@ -480,8 +478,8 @@
                     <div class="field">
                          <input class="text" type="file" style="width:200px" value="" name="photo" id="photo">
                     </div>
-                    <div class="field" @click.once="activeDropdown">
-                        <sku-status-selects :selectedvalue="newsku.skuStatus" :skuid="0" @changeskustatus="vmodelSkuStatus2"></sku-status-selects>
+                    <div class="field">
+                        <sku-status-selects :selectedvalue="newsku.skuStatus" :skuid="0" module="newsku" @changeskustatus="vmodelSkuStatus2"></sku-status-selects>
                     </div>
                 </div>
                 <div class="field">
