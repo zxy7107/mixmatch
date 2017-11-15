@@ -111,7 +111,8 @@ new Vue({
             $.ajax({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
-                url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
+                // url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
+                url: "http://10.32.80.152:8099/mixmatch/Api/GetSkuList.php",
                 // url: "http://192.168.0.104/mixmatch/Api/GetSkuList.php",
                 data: {}
             }).always(function(res) {
@@ -136,7 +137,8 @@ new Vue({
             $.ajax({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
-                url: "http://192.168.1.5/mixmatch/Api/GetSkuMixList.php",
+                // url: "http://192.168.1.5/mixmatch/Api/GetSkuMixList.php",
+                url: "http://10.32.80.152:8099/mixmatch/Api/GetSkuMixList.php",
                 // url: "http://192.168.0.104/mixmatch/Api/GetSkuMixList.php",
                 data: {}
             }).always(function(res) {
@@ -168,7 +170,8 @@ new Vue({
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=add",
-                url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=add",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=add",
+                url: "http://10.32.80.152:8099/mixmatch/Api/SkuMixAction.php?action=add",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=add",
                 // data: {
                 //     sku: formData
@@ -244,7 +247,8 @@ new Vue({
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuMixAction.php?action=updatesingle",
-                url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=updatesingle",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=updatesingle",
+                url: "http://10.32.80.152:8099/mixmatch/Api/SkuMixAction.php?action=updatesingle",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=updatesingle",
                 data: {
                     id: target.id,
@@ -329,7 +333,8 @@ new Vue({
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuMixAction.php?action=update",
-                url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=update",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuMixAction.php?action=update",
+                url: "http://10.32.80.152:8099/mixmatch/Api/SkuMixAction.php?action=update",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuMixAction.php?action=update",
                 data: formData,
                 processData: false,
@@ -374,7 +379,8 @@ new Vue({
             $.ajax({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
-                url: "http://192.168.1.5/mixmatch/Api/GetSku.php",
+                // url: "http://192.168.1.5/mixmatch/Api/GetSku.php",
+                url: "http://10.32.80.152:8099/mixmatch/Api/GetSku.php",
                 // url: "http://192.168.0.104/mixmatch/Api/GetSku.php",
                 data: {}
             }).always(function(res) {

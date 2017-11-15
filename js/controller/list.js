@@ -13,79 +13,92 @@ $('.asterisk.icon').on('click', function() {
 
 })
 $('.ui.sticky').sticky();
-$('tr').on('click', function(){
-  window.location.href = "./detail.html"
+$('tr').on('click', function() {
+    window.location.href = "./detail.html"
 })
 
+    $(document)
+        .ready(function() {
+            $('.special.card .image').dimmer({
+                on: 'hover'
+            });
+            $('.star.rating')
+                .rating();
+            $('.card .dimmer')
+                .dimmer({
+                    on: 'hover'
+                });
+        });
+
 Vue.component('demo-grid', {
-  template: '#grid-template',
-  replace: true,
-  props: {
-    // data: Array,
-    columns: Array,
-    filterKey: String,
-    skulist: Array,
-  },
-  data: function () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
-    return {
-      sortKey: '',
-      sortOrders: sortOrders,
-    }
-  },
-  computed: {
-    filteredData: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var data = this.skulist
-      if (filterKey) {
-        data = data.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
+    template: '#grid-template',
+    replace: true,
+    props: {
+        // data: Array,
+        columns: Array,
+        filterKey: String,
+        skulist: Array,
+    },
+    data: function() {
+        var sortOrders = {}
+        this.columns.forEach(function(key) {
+            sortOrders[key] = 1
         })
-      }
-      if (sortKey) {
-        data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
-        })
-      }
-      console.log('filteredData::::')
-      console.log(data)
-      return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-  },
-  mounted: function() {
-    var self = this;
-    // self.getSkuList();
+        return {
+            sortKey: '',
+            sortOrders: sortOrders,
+        }
+    },
+    computed: {
+        filteredData: function() {
+            var sortKey = this.sortKey
+            var filterKey = this.filterKey && this.filterKey.toLowerCase()
+            var order = this.sortOrders[sortKey] || 1
+            var data = this.skulist
+            if (filterKey) {
+                data = data.filter(function(row) {
+                    return Object.keys(row).some(function(key) {
+                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                    })
+                })
+            }
+            if (sortKey) {
+                data = data.slice().sort(function(a, b) {
+                    a = a[sortKey]
+                    b = b[sortKey]
+                    return (a === b ? 0 : a > b ? 1 : -1) * order
+                })
+            }
+            console.log('filteredData::::')
+            console.log(data)
+            return data
+        }
+    },
+    filters: {
+        capitalize: function(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1)
+        }
+    },
+    mounted: function() {
+        var self = this;
+        // self.getSkuList();
 
 
-},
-
-  methods: {
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
     },
 
-       
+    methods: {
+        sortBy: function(key) {
+            this.sortKey = key
+            this.sortOrders[key] = this.sortOrders[key] * -1
+        },
+
+
 
         updateSku: function(e) {
             var self = this;
             var barcode = $(e.target).closest('tr').attr('data-skuid');
             var photoinput = $(e.target).closest('tr').find('.updatephoto');
-            var target = _.find(self.skulist, function(sku){
+            var target = _.find(self.skulist, function(sku) {
                 return sku.barcode == barcode
             })
 
@@ -101,19 +114,20 @@ Vue.component('demo-grid', {
             formData.append("purchaseDate", target.purchaseDate);
             // HTML 文件类型input，由用户选择
             console.log(photoinput[0].files)
-            if(photoinput[0].files[0]) {
+            if (photoinput[0].files[0]) {
                 formData.append("photo", photoinput[0].files[0]);
             } else {
                 formData.append("photo", target.photo);
             }
             console.log(target.photo)
 
-     
+
 
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=update",
-                url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=update",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=update",
+                url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=update",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuAction.php?action=update",
                 data: formData,
                 processData: false,
@@ -177,36 +191,36 @@ Vue.component('demo-grid', {
                 .dropdown('set selected', '5');
 
         },
-        vmodelSkuStatus: function(skuid, value){
+        vmodelSkuStatus: function(skuid, value) {
             var self = this;
             console.log(skuid)
-            if(skuid) {
-               var target = _.find(self.skulist, function(sku){
-                console.log(sku.barcode)
-                return sku.barcode == skuid
+            if (skuid) {
+                var target = _.find(self.skulist, function(sku) {
+                    console.log(sku.barcode)
+                    return sku.barcode == skuid
                 })
-                target.skuStatus = value; 
+                target.skuStatus = value;
                 // self.updateSku();
-            // var barcode = $(e.target).closest('tr').attr('data-skuid');
+                // var barcode = $(e.target).closest('tr').attr('data-skuid');
                 $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
             } else {
                 //新增sku
                 self.newsku.skuStatus = value;
             }
-            
+
         },
-        cancelSku: function(){
+        cancelSku: function() {
             var self = this;
             // self.getSkuList();
             self.$emit('renderList')
         },
-        deleteSku: function(){
+        deleteSku: function() {
             var self = this;
         }
-  }
+    }
 })
 
-Vue.component('sku-status-selects',{
+Vue.component('sku-status-selects', {
     template: '#sku-status-selects-template',
     props: ['selectedvalue', 'skuid'],
     data: function() {
@@ -222,11 +236,11 @@ Vue.component('sku-status-selects',{
     computed: {
         pageindex: function() {
             var self = this;
-            
+
             return tmp;
         }
     },
-    mounted: function(){
+    mounted: function() {
         var self = this;
         $(self.$el).dropdown('set selected', self.selectedvalue).dropdown({
             onChange: function(value, text, $selectedItem) {
@@ -247,24 +261,23 @@ new Vue({
     data: {
         searchQuery: '',
         // gridColumns: ['name', 'power'],
-        gridColumns: ['photo','skuStatus', 'skuName', 'size','price','brand','channel','purchaseDate','skuType'],
+        gridColumns: ['photo', 'skuStatus', 'skuName', 'size', 'price', 'brand', 'channel', 'purchaseDate', 'skuType'],
         // gridData: [
         //   { name: 'Chuck Norris', power: Infinity },
         //   { name: 'Bruce Lee', power: 9000 },
         //   { name: 'Jackie Chan', power: 7000 },
         //   { name: 'Jet Li', power: 8000 }
         // ],
-      newsku: {},
-      skulist: []
-        
+        newsku: {},
+        skulist: []
+
     },
     computed: {
         // token: function() {
         //     return getCookie('token')
         // }
     },
-    components: {
-    },
+    components: {},
     // created: function(){
     //     var self = this;
     //     if(!self.token) {
@@ -274,17 +287,67 @@ new Vue({
     mounted: function() {
         var self = this;
         self.getSkuList();
+        $('.ui.modal')
+            .modal('setting', 'dimmerSettings', {
+                opacity: 0.2,
+                closable : false
+            })
+            .modal('setting', 'allowMultiple', true)
+            .modal('setting', 'closable', false)
+   
+        // $('.second.modal')
+        //   .modal('attach events', '.first.modal .button')
+        // ;
+        $('.first.modal')
+            .modal({
+               closable  : false,
+                // onDeny    : function(){
+                //   window.alert('Wait not yet!');
+                //   return false;
+                // },
+                onApprove : function() {
+                    self.saveSku();
+                    return false;
+                } 
+            });
+        $( "#datepicker" ).datepicker({
+                // numberOfMonths: 1,
+                // showOn: 'both',
+                // buttonText: '',
+                // prevText: '',
+                // nextText: '',
+                // beforeShow: function(input, inst) {
+                //     var newclass = 'admin-form';
+                //     var themeClass = $(this).parents('.admin-form').attr('class');
+                //     var smartpikr = inst.dpDiv.parent();
+                //     if (!smartpikr.hasClass(themeClass)) {
+                //         inst.dpDiv.wrap('<div class="' + themeClass + '"></div>');
+                //     }
+                // },
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true,
+                onSelect: function(dateText, event) {
+                    // self.$emit('selectedhandler', dateText, self.labelid)
+                }
+            });
+        $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd")
 
 
     },
     methods: {
+        addNewSku: function(){
+            var self = this;
+            $('.first.modal').modal('show');
+        },
         getSkuList: function() {
             var self = this;
 
             $.ajax({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
-                url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
+                // url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
+                url: "http://10.32.80.152:8099/mixmatch/Api/GetSkuList.php",
                 // url: "http://192.168.0.104/mixmatch/Api/GetSkuList.php",
                 data: {}
             }).always(function(res) {
@@ -329,28 +392,29 @@ new Vue({
                 self.skulist = res;
             });
         },
-                vmodelSkuStatus2: function(skuid, value){
+        vmodelSkuStatus2: function(skuid, value) {
             var self = this;
             console.log(skuid)
-            if(skuid) {
-               var target = _.find(self.skulist, function(sku){
-                console.log(sku.barcode)
-                return sku.barcode == skuid
+            if (skuid) {
+                var target = _.find(self.skulist, function(sku) {
+                    console.log(sku.barcode)
+                    return sku.barcode == skuid
                 })
-                target.skuStatus = value; 
+                target.skuStatus = value;
                 // self.updateSku();
-            // var barcode = $(e.target).closest('tr').attr('data-skuid');
+                // var barcode = $(e.target).closest('tr').attr('data-skuid');
                 $("[data-skuid='" + skuid + "']").find('.ui.button.orange').trigger('click');
             } else {
                 //新增sku
                 self.newsku.skuStatus = value;
             }
-            
+
         },
 
-         
- 
+
+
         saveSku: function(e) {
+            
             var self = this;
             var formData = new FormData();
 
@@ -368,27 +432,27 @@ new Vue({
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=add",
-                url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=add",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=add",
+                url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=add",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuAction.php?action=add",
                 // data: {
                 //     sku: formData
                 // },
-                data:formData,
+                data: formData,
                 processData: false,
                 contentType: false
             }).always(function(res) {
                 //假数据START
-                
+
                 //假数据END
                 alert(res.success)
-
-                if(res.success) {
-                   // self.newsku = {};
+                if (res.success) {
+                    // $('.first.modal').modal('hide')
                 } else {
                     alert('error')
-                   
+
                 }
-                self.getSkuList(); 
+                self.getSkuList();
 
             });
         },

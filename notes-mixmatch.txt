@@ -1,0 +1,151 @@
+慕课网：快速入门ThinkPHP5.0 --模型篇
+数据库操作
+ThinkPHP5模型
+
+ctrip office====================================================================
+
+http://127.0.0.1:8099/mixmatch/pages/index.html
+http://10.32.80.152:8099/mixmatch/pages/index.html
+
+
+cd D:\Users\zhangxy\Documents\Learning\www\mysql\bin
+net start mysql
+mysql -u root -p
+123456
+
+
+mysql> create database course;
+mysql> source D:\Users\zhangxy\Documents\Learning\www\Apache24\htdocs\mixmatch\数据库\mixmatch_db.sql
+D:\Users\\zhangxy\\Documents\\Learning\\www\\Apache24\\htdocs\\mixmatch\\数据库\\mixmatch_db.sql
+D:\Users\zhangxy\Documents\Learning\www\Apache24\htdocs\mixmatch\数据库\mixmatch_db2.sql
+
+mysql > \. 路径
+show tables;
+mysql> select * from imooc_user;
+mysql> show variable like '%character%'
+
+mysql> bank  d:\..
+
+mysql –uroot –p123456 -Dtest<D:\Users\zhangxy\Documents\Learning\www\Apache24\htdocs\mixmatch\数据库\mixmatch_db.sql
+
+错误：
+Failed to open file 'xxx.sql', error: 2
+ 
+网上搜到的解决办法多半是把sql文件放到MySQL的bin目录下
+我的问题是，ｓｑｌ文件名不能有特殊符号，包括下划线，删掉就行了；
+
+
+D:\Users\zhangxy\Documents\Learning\www\mysql\bin\mixmatch_db.sql
+
+thinkphp：
+composer -V
+composer create-project topthink/think mixmatch-tp5 --prefer-dist
+composer.json 配置文件
+
+
+http://10.32.80.152:8099/mixmatch-tp5/public/index.php/index/index/demo
+
+查询：
+$db = Db::name('transfer');
+$res = $db -> select();
+
+$res = Db::table('imooc_user')->select();
+$res = Db::table('imooc_user')->column('email', 'username'); 第2个参数为key
+$res = Db::table('imooc_user')->where([
+                'id' => '10'
+            ])->find();
+$res = Db::table('imooc_user')->where([
+                 'id' => '10'
+             ])->value('username');
+$res = Db::name('user')->select();	//Db类是单例模式,不用实例化 
+$res = db('user',[],false)->select();//db助手函数
+
+插入：
+$db = Db::name('transfer');
+        //insert返回影响记录的行数 插入数
+        // $db->insert([
+        //     'email' => 'imooc_03@qq.com',
+        //     'password' => md5('imooc_03'),
+        //     'username' => 'imooc_03'
+        // ]);
+
+//insertGetId 返回插入数据的自增id
+//insertAll 返回插入数据成功的行数
+        // $data = [];
+        // for($i=0; $i<10; $i++) {
+        //     $data[] = [
+        //         'email' => "imooc_03_{$i}@qq.com",
+        //         'password' => md5("imooc_{$i}"),
+        //         'username' => "imooc_{$i}"
+        //     ];
+        // }
+        // $db->insertAll($data);		
+		
+sql条件表达式
+
+        //1
+        // $sql = $db->where([
+        //         'id' => 1
+        // ])->buildSql();
+
+        //2
+        // $sql = $db->where("id=1")->buildSql();
+
+        //3
+        // $sql = $db->where("id", 1)->buildSql();
+
+        //4 条件表达式 不区分大小写
+        //EQ =
+        //NEQ <>
+        //LT <
+        //ELT <=
+        //GT >
+        //EGT >=
+        //BETWEEN BETWEEN * AND *
+        //NOTBETWEEN NOTBETWEEN * AND *
+        //IN IN(*,*)
+        //NOTIN NOT IN(*,*)
+        // $sql = $db->where("id", "EGT", 1)->buildSql();
+        // $sql = $db->where("id", "notbetween", "1,5")->buildSql();
+        // $sql = $db->where("id", "notbetween", [1,10])->buildSql();
+        // $sql = $db->where("id", "in", [1,10,20])->buildSql();
+
+
+        //5
+        // $sql = $db->where([
+        //         'id' => ['EGT', 1],
+        //         'username' => ['IN', [1,2,3,4,5]]
+        // ])->buildSql();
+
+        //6
+        // $sql = $db->where("id", "EXP", "not in (1,2,3)")->buildSql();
+
+        //7
+        // $sql = $db
+        // ->where("id", "in", "1,2,3")
+        // ->where("username", "eq", "my")
+        // ->buildSql();
+
+        //8
+        // $sql = $db
+        // ->where("id", "in", "1,2,3")
+        // ->whereOr("username", "eq", "my")
+        // ->buildSql();
+
+        // dump($sql);
+
+        // $db = Db::name('transfer');
+        // $res = Db::table('myfunds_transfer')
+        // ->where([
+        //     'accountOut' => '❤️财通可持续组合'
+        //     ])
+        // ->whereOr('accountIn', 'EQ', '❤️财通可持续组合')
+        // ->select();
+		
+		
+		
+http://10.32.80.152:8099/mixmatch-tp5/public/index.php/index/index/sku
+http://10.32.80.152:8099/mixmatch-tp5/public/index/index/getSkuList
+
+控制器
+return json($result);
