@@ -38,6 +38,7 @@ Vue.component('demo-grid', {
         columns: Array,
         filterKey: String,
         skulist: Array,
+        filterStatus: String
     },
     data: function() {
         var sortOrders = {}
@@ -51,6 +52,8 @@ Vue.component('demo-grid', {
     },
     computed: {
         filteredData: function() {
+
+            var self = this;
             var sortKey = this.sortKey
             var filterKey = this.filterKey && this.filterKey.toLowerCase()
             var order = this.sortOrders[sortKey] || 1
@@ -62,12 +65,26 @@ Vue.component('demo-grid', {
                     })
                 })
             }
-            if (sortKey) {
-                data = data.slice().sort(function(a, b) {
-                    a = a[sortKey]
-                    b = b[sortKey]
-                    return (a === b ? 0 : a > b ? 1 : -1) * order
+            if(this.filterStatus) {
+                data = data.filter(function(row){
+                    return row.skuStatus == self.filterStatus
                 })
+            }
+            if (sortKey) {
+                if (sortKey == 'price') {
+                    data = data.slice().sort(function(a, b) {
+                        a = parseFloat(a[sortKey])
+                        b = parseFloat(b[sortKey])
+                        return (a === b ? 0 : a > b ? 1 : -1) * order
+                    })
+                } else {
+                    data = data.slice().sort(function(a, b) {
+                        a = a[sortKey]
+                        b = b[sortKey]
+                        return (a === b ? 0 : a > b ? 1 : -1) * order
+                    })
+                }
+
             }
             console.log('filteredData::::')
             console.log(data)
@@ -148,34 +165,7 @@ Vue.component('demo-grid', {
                 // }
             }).always(function(res) {
                 //假数据START
-                // res ={
-                //     "result":[
-                //         {
-                //             "name":"1D风险价值",
-                //             "per95":"0.64",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"1D预期收益不足",
-                //             "per95":"0.64",
-                //             "per99":"0.52"
-                //         },
-                //         {
-                //             "name":"10D风险价值",
-                //             "per95":"0.44",
-                //             "per99":"0.63"
-                //         },
-                //         {
-                //             "name":"10D预期收益不足",
-                //             "per95":"0.78",
-                //             "per99":"0.63"
-                //         }],
-                //         "code":"",
-                //         "resultMassage":"",
-                //         "success":true
-                //     }
                 //假数据END
-                // alert(JSON.stringify(res));
                 console.log(res)
                 // self.getSkuList();
 
@@ -222,7 +212,7 @@ Vue.component('demo-grid', {
 
 Vue.component('sku-status-selects', {
     template: '#sku-status-selects-template',
-    props: ['selectedvalue', 'skuid'],
+    props: ['selectedvalue', 'skuid', 'module'],
     data: function() {
         return {
             counter: 1,
@@ -244,7 +234,11 @@ Vue.component('sku-status-selects', {
         var self = this;
         $(self.$el).dropdown('set selected', self.selectedvalue).dropdown({
             onChange: function(value, text, $selectedItem) {
-                self.$emit('changeskustatus', self.skuid, value)
+                if (self.skuid || self.module == 'newsku') {
+                    self.$emit('changeskustatus', self.skuid, value)
+                } else {
+                    self.$emit('filterstatus', value);
+                }
             }
         });
     },
@@ -259,6 +253,7 @@ Vue.component('sku-status-selects', {
 new Vue({
     el: '#app',
     data: {
+        filterStatus: '',
         searchQuery: '',
         // gridColumns: ['name', 'power'],
         gridColumns: ['photo', 'skuStatus', 'skuName', 'size', 'price', 'brand', 'channel', 'purchaseDate', 'skuType'],
@@ -287,6 +282,7 @@ new Vue({
     mounted: function() {
         var self = this;
         self.getSkuList();
+
         $('.ui.modal')
             .modal('setting', 'dimmerSettings', {
                 opacity: 0.2,
@@ -339,6 +335,13 @@ new Vue({
         addNewSku: function(){
             var self = this;
             $('.first.modal').modal('show');
+
+        },
+
+        fliterStatusData: function(value) {
+            var self = this;
+            self.filterStatus = value;
+
         },
         getSkuList: function() {
             var self = this;
@@ -394,7 +397,6 @@ new Vue({
         },
         vmodelSkuStatus2: function(skuid, value) {
             var self = this;
-            console.log(skuid)
             if (skuid) {
                 var target = _.find(self.skulist, function(sku) {
                     console.log(sku.barcode)
@@ -410,8 +412,14 @@ new Vue({
             }
 
         },
+        activeDropdown2: function(e) {
+            // $(e.target).closest('.ui.dropdown').dropdown('show');
 
+            // $('.ui.floating.labeled.dropdown.button')
+            $(e.target).closest('.ui.dropdown')
+                .dropdown('set selected', '5');
 
+        },
 
         saveSku: function(e) {
             
@@ -446,8 +454,10 @@ new Vue({
 
                 //假数据END
                 alert(res.success)
+
                 if (res.success) {
                     // $('.first.modal').modal('hide')
+
                 } else {
                     alert('error')
 
