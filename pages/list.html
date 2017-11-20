@@ -418,6 +418,11 @@
                         </td>
                         <td>
                             <div class="ui fluid transparent input">
+                                <textarea type="text" placeholder="归档日期" v-model="entry.archiveDate"></textarea>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="ui fluid transparent input">
                                 <textarea type="text" placeholder="类别" v-model="entry.skuType"></textarea>
                             </div>
                             <div class="ui fluid multiple search selection dropdown" @click.once="activeDropdown">
@@ -515,6 +520,10 @@
                     <input type="text" id="datepicker"  placeholder="购买日期" v-model="newsku.purchaseDate">
                 </div>               
                 <div class="field">
+                    <label>归档日期</label>
+                    <input type="text" placeholder="归档日期" v-model="newsku.archiveDate">
+                </div>               
+                <div class="field">
                     <label>类别</label>
                     <textarea rows="2" type="text" placeholder="类别" v-model="newsku.skuType"></textarea>
                 </div>  
@@ -580,7 +589,7 @@
                        :columns="gridColumns"
                        :filter-key="searchQuery"
                        :filter-status="filterStatus"
-                       @render-list="getSkuList"
+                       @renderlist="getSkuList"
                        >
 
                     </demo-grid>

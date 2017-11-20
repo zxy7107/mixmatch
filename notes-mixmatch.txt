@@ -7,11 +7,18 @@ ctrip office====================================================================
 http://127.0.0.1:8099/mixmatch/pages/index.html
 http://10.32.80.152:8099/mixmatch/pages/index.html
 
+cd D:/Users/zhangxy/Documents/Learning/www/Apache24/bin
+httpd -k restart -n "ApacheServer"
 
 cd D:\Users\zhangxy\Documents\Learning\www\mysql\bin
 net start mysql
 mysql -u root -p
 123456
+
+
+
+
+
 
 
 mysql> create database course;
@@ -35,7 +42,7 @@ Failed to open file 'xxx.sql', error: 2
 我的问题是，ｓｑｌ文件名不能有特殊符号，包括下划线，删掉就行了；
 
 
-D:\Users\zhangxy\Documents\Learning\www\mysql\bin\mixmatch_db.sql
+【公司使用的sql文件】D:\Users\zhangxy\Documents\Learning\www\mysql\bin\mixmatch_db.sql
 
 thinkphp：
 composer -V
@@ -149,3 +156,11 @@ http://10.32.80.152:8099/mixmatch-tp5/public/index/index/getSkuList
 
 控制器
 return json($result);
+
+
+----------------------------------------------------------------------------
+sql新增字段
+>desc 表名称; 查询表的字段信息
+alter table t_sku add archiveDate datetime DEFAULT NULL;
+
+----------------------------------------------------------------------------

@@ -98,7 +98,6 @@ Vue.component('demo-grid', {
     },
     mounted: function() {
         var self = this;
-        // self.getSkuList();
 
 
     },
@@ -108,7 +107,6 @@ Vue.component('demo-grid', {
             this.sortKey = key
             this.sortOrders[key] = this.sortOrders[key] * -1
         },
-
 
 
         updateSku: function(e) {
@@ -129,6 +127,7 @@ Vue.component('demo-grid', {
             formData.append("size", target.size);
             formData.append("price", target.price);
             formData.append("purchaseDate", target.purchaseDate);
+            formData.append("archiveDate", target.archiveDate);
             // HTML 文件类型input，由用户选择
             console.log(photoinput[0].files)
             if (photoinput[0].files[0]) {
@@ -144,32 +143,23 @@ Vue.component('demo-grid', {
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=update",
                 // url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=update",
-                url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=update",
+                // url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=update",
+                url: "http://10.32.80.152:8099/mixmatch-tp5/public/index/index/updateSku",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuAction.php?action=update",
                 data: formData,
                 processData: false,
                 contentType: false
-                // data: {
-                //     sku: {
-                //         barcode: barcode,
-                //         skuName: target.skuName,
-                //         skuType: target.skuType,
-                //         skuStatus: target.skuStatus,
-                //         channel: target.channel,
-                //         brand: target.brand,
-                //         size: target.size,
-                //         price: target.price,
-                //         photo: target.photo,
-                //         purchaseDate: target.purchaseDate
-                //     }
-                // }
+
             }).always(function(res) {
                 //假数据START
                 //假数据END
-                console.log(res)
-                // self.getSkuList();
 
-                self.$emit('renderList')
+                console.log(res)
+                if(res.success) {
+                    self.$emit('renderlist')
+                } else {
+                    alert('更新失败')
+                }
 
             });
         },
@@ -197,13 +187,35 @@ Vue.component('demo-grid', {
             }
 
         },
-        cancelSku: function() {
+        // cancelSku: function() {
+        //     var self = this;
+        //     self.$emit('renderlist');
+        // },
+        deleteSku: function(e) {
             var self = this;
-            // self.getSkuList();
-            self.$emit('renderList')
-        },
-        deleteSku: function() {
-            var self = this;
+            var barcode = $(e.target).closest('tr').attr('data-skuid');
+            $.ajax({
+                method: "POST",
+                // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=update",
+                // url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=update",
+                // url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=update",
+                // url: "http://192.168.0.104/mixmatch/Api/SkuAction.php?action=update",
+                url: "http://10.32.80.152:8099/mixmatch-tp5/public/index/index/deleteSku",
+                data: {
+                    barcode: barcode
+                },
+
+            }).always(function(res) {
+                //假数据START
+                //假数据END
+
+                console.log(res)
+                if(res.success) {
+                    self.$emit('renderlist')
+                } else {
+                    alert('删除失败')
+                }
+            });
         }
     }
 })
@@ -265,7 +277,7 @@ new Vue({
         filterStatus: '',
         searchQuery: '',
         // gridColumns: ['name', 'power'],
-        gridColumns: ['photo', 'skuStatus', 'skuName', 'size', 'price', 'brand', 'channel', 'purchaseDate', 'skuType'],
+        gridColumns: ['photo', 'skuStatus', 'skuName', 'size', 'price', 'brand', 'channel', 'purchaseDate', 'archiveDate', 'skuType'],
         // gridData: [
         //   { name: 'Chuck Norris', power: Infinity },
         //   { name: 'Bruce Lee', power: 9000 },
@@ -355,13 +367,13 @@ new Vue({
         },
         getSkuList: function() {
             var self = this;
-
             $.ajax({
                 method: "GET",
                 // url: "http://127.0.0.1/mixmatch/Api/GetSkuList.php",
                 // url: "http://192.168.1.5/mixmatch/Api/GetSkuList.php",
-                url: "http://10.32.80.152:8099/mixmatch/Api/GetSkuList.php",
+                // url: "http://10.32.80.152:8099/mixmatch/Api/GetSkuList.php",
                 // url: "http://192.168.0.104/mixmatch/Api/GetSkuList.php",
+                url:"http://10.32.80.152:8099/mixmatch-tp5/public/index/index/getSkuList",
                 data: {}
             }).always(function(res) {
                 
@@ -408,14 +420,16 @@ new Vue({
             formData.append("size", self.newsku.size);
             formData.append("price", self.newsku.price);
             formData.append("purchaseDate", self.newsku.purchaseDate);
+            formData.append("archiveDate", self.newsku.archiveDate);
             // HTML 文件类型input，由用户选择
             formData.append("photo", $('#photo')[0].files[0]);
             $.ajax({
                 method: "POST",
                 // url: "http://127.0.0.1/mixmatch/Api/SkuAction.php?action=add",
                 // url: "http://192.168.1.5/mixmatch/Api/SkuAction.php?action=add",
-                url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=add",
+                // url: "http://10.32.80.152:8099/mixmatch/Api/SkuAction.php?action=add",
                 // url: "http://192.168.0.104/mixmatch/Api/SkuAction.php?action=add",
+                url:"http://10.32.80.152:8099/mixmatch-tp5/public/index/index/addSku",
                 // data: {
                 //     sku: formData
                 // },
