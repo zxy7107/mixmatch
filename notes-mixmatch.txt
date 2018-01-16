@@ -10,6 +10,12 @@ http://10.32.80.152:8099/mixmatch/pages/index.html
 cd D:/Users/zhangxy/Documents/Learning/www/Apache24/bin
 httpd -k restart -n "ApacheServer"
 
+D:\Users\zhangxy\Documents\Learning\www\Apache24\conf\httpd.conf
+
+DocumentRoot "D:/Users/zhangxy/Documents/Learning/www/Apache24/htdocs"
+<Directory "D:/Users/zhangxy/Documents/Learning/www/Apache24/htdocs">
+
+
 cd D:\Users\zhangxy\Documents\Learning\www\mysql\bin
 net start mysql
 mysql -u root -p
